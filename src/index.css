@@ -20,28 +20,57 @@ button:active {
   transform: translateY(0);
 }
 
+/* Hero: text left, stats/logo right */
+.ep-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 64px;
+  align-items: center;
+  padding: 32px 0 8px;
+}
+
+/* About: text left, feature grid right */
+.ep-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Feature grid always 2-col inside the about right column */
 .ep-feature-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  margin-top: 20px;
+}
+
+/* How it works: path rows */
+.ep-path-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+
+@media (max-width: 860px) {
+  .ep-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 20px 0 8px;
+  }
+
+  .ep-about-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 @media (max-width: 480px) {
   .ep-feature-grid {
     grid-template-columns: 1fr;
   }
-}
 
-.ep-path-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 14px;
-  border-radius: 8px;
-}
-
-@media (max-width: 480px) {
   .ep-path-row {
     flex-direction: column;
     align-items: flex-start;
@@ -51,11 +80,11 @@ button:active {
 
 .ep-nav-links {
   display: flex;
-  gap: 16px;
+  gap: 24px;
 }
 
 @media (max-width: 360px) {
   .ep-nav-links {
-    gap: 10px;
+    gap: 12px;
   }
 }
