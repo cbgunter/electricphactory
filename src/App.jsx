@@ -82,8 +82,16 @@ const RegionMap = () => (
   </svg>
 );
 
+const Container = ({ children }) => (
+  <div style={{ maxWidth: "700px", margin: "0 auto", width: "100%" }}>
+    {children}
+  </div>
+);
+
 const Section = ({ children, bg, id }) => (
-  <div id={id} style={{ background: bg || C.cream, padding: "48px 20px" }}>{children}</div>
+  <div id={id} style={{ background: bg || C.cream, padding: "48px 24px" }}>
+    <Container>{children}</Container>
+  </div>
 );
 
 const SectionLabel = ({ children }) => (
@@ -127,7 +135,7 @@ const EventCard = ({ event }) => (
         {event.date.split(" ")[1]}
       </div>
     </div>
-    <div style={{ flex: 1 }}>
+    <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 700, color: C.green, marginBottom: "2px" }}>
         {event.name}
       </div>
@@ -140,6 +148,7 @@ const EventCard = ({ event }) => (
           background: event.tag === "Individual" ? `${C.green}12` : `${C.orange}14`,
           color: event.tag === "Individual" ? C.green : C.orange,
           padding: "2px 7px", borderRadius: "3px", textTransform: "uppercase", letterSpacing: "0.04em",
+          whiteSpace: "nowrap",
         }}>{event.tag}</span>
         {event.hang !== "TBD" && (
           <span style={{ fontFamily: "'DM Sans'", fontSize: "10px", color: `${C.silver}cc` }}>
@@ -171,28 +180,33 @@ export default function App() {
 
       {/* NAV */}
       <nav style={{
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        padding: "14px 20px", borderBottom: `1px solid ${C.sand}`,
+        borderBottom: `1px solid ${C.sand}`,
         position: "sticky", top: 0, background: `${C.cream}ee`, zIndex: 100,
         backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <img
-            src="/logo.png"
-            alt="Electric Phactory"
-            style={{ width: "32px", height: "32px", objectFit: "contain" }}
-          />
-          <span style={{ fontFamily: "'Outfit'", fontWeight: 700, fontSize: "13px", letterSpacing: "0.04em" }}>
-            ELECTRIC PHACTORY
-          </span>
-        </div>
-        <div style={{ display: "flex", gap: "16px" }}>
-          {["Events", "About", "Join"].map((n) => (
-            <a key={n} href={`#${n.toLowerCase()}`} style={{
-              fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver,
-              textDecoration: "none",
-            }}>{n}</a>
-          ))}
+        <div style={{
+          maxWidth: "700px", margin: "0 auto",
+          display: "flex", justifyContent: "space-between", alignItems: "center",
+          padding: "14px 24px",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <img
+              src="/logo.png"
+              alt="Electric Phactory"
+              style={{ width: "32px", height: "32px", objectFit: "contain" }}
+            />
+            <span style={{ fontFamily: "'Outfit'", fontWeight: 700, fontSize: "13px", letterSpacing: "0.04em" }}>
+              ELECTRIC PHACTORY
+            </span>
+          </div>
+          <div className="ep-nav-links">
+            {["Events", "About", "Join"].map((n) => (
+              <a key={n} href={`#${n.toLowerCase()}`} style={{
+                fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver,
+                textDecoration: "none",
+              }}>{n}</a>
+            ))}
+          </div>
         </div>
       </nav>
 
@@ -208,7 +222,7 @@ export default function App() {
             Est. 2021 · No Laying Up Roost · Philly / DE
           </div>
           <h1 style={{
-            fontFamily: "'Outfit'", fontSize: "36px", fontWeight: 800,
+            fontFamily: "'Outfit'", fontSize: "clamp(32px, 8vw, 48px)", fontWeight: 800,
             lineHeight: 1.06, letterSpacing: "-0.035em",
             margin: "0 0 16px", color: C.green,
           }}>
@@ -217,7 +231,7 @@ export default function App() {
           </h1>
           <p style={{
             fontFamily: "'DM Sans'", fontSize: "15px", lineHeight: 1.6,
-            color: C.silver, margin: "0 0 24px", maxWidth: "340px",
+            color: C.silver, margin: "0 0 24px", maxWidth: "420px",
           }}>
             335 avid golfers across the Greater Philadelphia region. Structured events, post-round hangs, and the kind of competition that makes Saturday tee times worth protecting.
           </p>
@@ -241,9 +255,7 @@ export default function App() {
         </div>
 
         {/* Stats strip */}
-        <div style={{
-          display: "flex", background: C.green, borderRadius: "10px", overflow: "hidden",
-        }}>
+        <div style={{ display: "flex", background: C.green, borderRadius: "10px", overflow: "hidden" }}>
           {[
             { num: "335", label: "Members" },
             { num: "5th", label: "Season" },
@@ -255,7 +267,7 @@ export default function App() {
               borderRight: i < 3 ? `1px solid ${C.deep}` : "none",
             }}>
               <div style={{
-                fontFamily: "'Outfit'", fontSize: "18px", fontWeight: 800,
+                fontFamily: "'Outfit'", fontSize: "clamp(14px, 4vw, 18px)", fontWeight: 800,
                 color: C.orange, letterSpacing: "-0.02em",
               }}>{s.num}</div>
               <div style={{
@@ -279,18 +291,14 @@ export default function App() {
           We run 8 scored events per season plus match play, a Ryder Cup, and our annual Roost Major. Every event has a planned post-round hang — because sometimes that's the best part. 50% of every $5 entry goes to Philabundance. The other 50% goes to the winners.
         </Body>
 
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginTop: "20px",
-        }}>
+        <div className="ep-feature-grid">
           {[
             { icon: "⚡", title: "Structured Competition", desc: "Net quota, Pick-a-Pro, match play, scrambles — real formats with real points on the line." },
             { icon: "🍺", title: "Post-Round Hangs", desc: "Watch parties, brewery outings, and always a plan for after. The hang is the product." },
             { icon: "🤝", title: "All Skill Levels", desc: "Net scoring levels the playing field. 60% join to meet new golfers. No gatekeeping." },
             { icon: "🏆", title: "Stakes That Matter", desc: "Race to the Steeplechase points → Regional Team → Roost Club Championship at Sweetens Cove." },
           ].map((item, i) => (
-            <div key={i} style={{
-              background: C.cream, borderRadius: "10px", padding: "14px",
-            }}>
+            <div key={i} style={{ background: C.cream, borderRadius: "10px", padding: "14px" }}>
               <div style={{ fontSize: "20px", marginBottom: "6px" }}>{item.icon}</div>
               <div style={{ fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 700, color: C.green, marginBottom: "3px" }}>
                 {item.title}
@@ -316,9 +324,7 @@ export default function App() {
         }}>
           <RegionMap />
         </div>
-        <div style={{
-          display: "flex", gap: "16px", marginTop: "12px", justifyContent: "center",
-        }}>
+        <div style={{ display: "flex", gap: "16px", marginTop: "12px", justifyContent: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
             <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.orange }} />
             <span style={{ fontFamily: "'DM Sans'", fontSize: "10px", color: C.silver }}>2026 Courses</span>
@@ -382,7 +388,7 @@ export default function App() {
               <div style={{
                 fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 700,
                 color: i === 0 ? C.orange : C.green,
-                minWidth: "56px", paddingTop: "2px",
+                minWidth: "56px", paddingTop: "2px", flexShrink: 0,
               }}>{e.date}</div>
               <div>
                 <div style={{ fontFamily: "'Outfit'", fontSize: "14px", fontWeight: 700, color: C.green, marginBottom: "3px" }}>
@@ -412,31 +418,23 @@ export default function App() {
             { path: "Top performers at Steeplechase", reward: "Final 2 Regional Team spots" },
             { path: "Regional Team wins", reward: "Roost Club Championship at Sweetens Cove" },
           ].map((p, i) => (
-            <div key={i} style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "12px 14px", background: `${C.cream}08`, borderRadius: "8px",
-            }}>
+            <div key={i} className="ep-path-row" style={{ background: `${C.cream}08` }}>
               <span style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600, color: C.cream }}>
                 {p.path}
               </span>
-              <span style={{ fontFamily: "'DM Sans'", fontSize: "11px", color: C.orange, textAlign: "right" }}>
+              <span style={{ fontFamily: "'DM Sans'", fontSize: "11px", color: C.orange }}>
                 → {p.reward}
               </span>
             </div>
           ))}
         </div>
 
-        <div style={{
-          marginTop: "24px", padding: "14px",
-          background: `${C.cream}10`, borderRadius: "8px",
-        }}>
+        <div style={{ marginTop: "24px", padding: "14px", background: `${C.cream}10`, borderRadius: "8px" }}>
           <div style={{
             fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 600,
             color: C.orange, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px",
           }}>Match Play</div>
-          <p style={{
-            fontFamily: "'DM Sans'", fontSize: "12px", color: `${C.cream}70`, margin: 0, lineHeight: 1.5,
-          }}>
+          <p style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: `${C.cream}70`, margin: 0, lineHeight: 1.5 }}>
             32-player bracket. Four geographic groups, five matches each in group play. Top 2 from each group advance to single-elimination playoffs. The champion earns a Regional Team spot.
           </p>
         </div>
@@ -482,39 +480,40 @@ export default function App() {
       </Section>
 
       {/* FOOTER */}
-      <div style={{ background: C.deep, padding: "28px 20px 20px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
-          <img src="/logo.png" alt="" style={{ width: "24px", height: "24px", objectFit: "contain", opacity: 0.8 }} />
+      <div style={{ background: C.deep, padding: "28px 24px 20px" }}>
+        <div style={{ maxWidth: "700px", margin: "0 auto" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
+            <img src="/logo.png" alt="" style={{ width: "24px", height: "24px", objectFit: "contain", opacity: 0.8 }} />
+            <div style={{
+              fontFamily: "'Outfit'", fontWeight: 800, fontSize: "14px",
+              color: C.cream, letterSpacing: "0.04em",
+            }}>ELECTRIC PHACTORY</div>
+          </div>
           <div style={{
-            fontFamily: "'Outfit'", fontWeight: 800, fontSize: "14px",
-            color: C.cream, letterSpacing: "0.04em",
-          }}>ELECTRIC PHACTORY</div>
-        </div>
-        <div style={{
-          fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 500,
-          color: C.orange, letterSpacing: "0.06em", marginBottom: "14px",
-        }}>EST. 2021 · PHILADELPHIA · A NO LAYING UP ROOST</div>
-        <p style={{
-          fontFamily: "'DM Sans'", fontSize: "12px", lineHeight: 1.6,
-          color: `${C.cream}45`, margin: "0 0 18px", maxWidth: "320px",
-        }}>
-          Inaugural Roost Club Champions. Three-time Northeast Regional winners. 335 members and counting. There's something beautiful about meaningless — but structured — competition between peers.
-        </p>
-        <div style={{ display: "flex", gap: "18px", marginBottom: "18px", flexWrap: "wrap" }}>
-          {["Schedule", "Join", "Leaderboard", "Match Play", "Refuge"].map((link) => (
-            <span key={link} style={{
-              fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
-              color: C.orange, cursor: "pointer",
-            }}>{link}</span>
-          ))}
-        </div>
-        <div style={{
-          borderTop: `1px solid ${C.cream}10`, paddingTop: "12px",
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-        }}>
-          <span style={{ fontFamily: "'DM Sans'", fontSize: "10px", color: `${C.cream}30` }}>
-            © 2026 Electric Phactory · 50% of entry fees donated to Philabundance
-          </span>
+            fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 500,
+            color: C.orange, letterSpacing: "0.06em", marginBottom: "14px",
+          }}>EST. 2021 · PHILADELPHIA · A NO LAYING UP ROOST</div>
+          <p style={{
+            fontFamily: "'DM Sans'", fontSize: "12px", lineHeight: 1.6,
+            color: `${C.cream}45`, margin: "0 0 18px", maxWidth: "320px",
+          }}>
+            Inaugural Roost Club Champions. Three-time Northeast Regional winners. 335 members and counting. There's something beautiful about meaningless — but structured — competition between peers.
+          </p>
+          <div style={{ display: "flex", gap: "18px", marginBottom: "18px", flexWrap: "wrap" }}>
+            {["Schedule", "Join", "Leaderboard", "Match Play", "Refuge"].map((link) => (
+              <span key={link} style={{
+                fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
+                color: C.orange, cursor: "pointer",
+              }}>{link}</span>
+            ))}
+          </div>
+          <div style={{
+            borderTop: `1px solid ${C.cream}10`, paddingTop: "12px",
+          }}>
+            <span style={{ fontFamily: "'DM Sans'", fontSize: "10px", color: `${C.cream}30` }}>
+              © 2026 Electric Phactory · 50% of entry fees donated to Philabundance
+            </span>
+          </div>
         </div>
       </div>
     </div>

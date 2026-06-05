@@ -19,3 +19,43 @@ button:hover {
 button:active {
   transform: translateY(0);
 }
+
+.ep-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+  .ep-feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ep-path-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .ep-path-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+.ep-nav-links {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 360px) {
+  .ep-nav-links {
+    gap: 10px;
+  }
+}
