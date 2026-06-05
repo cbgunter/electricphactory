@@ -1,0 +1,21 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+button:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+button:active {
+  transform: translateY(0);
+}
