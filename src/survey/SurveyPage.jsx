@@ -101,13 +101,21 @@ const QuestionLabel = ({ number, total }) => (
   </div>
 );
 
-const QuestionText = ({ children, light }) => (
+const QuestionText = ({ children, parts, light }) => (
   <h2 style={{
     fontFamily: "'Outfit'", fontSize: "clamp(22px, 4vw, 36px)", fontWeight: 800,
     lineHeight: 1.15, letterSpacing: "-0.025em",
     color: light ? C.cream : C.green,
     margin: "0 0 8px", textAlign: "center", maxWidth: "680px",
-  }}>{children}</h2>
+  }}>
+    {parts
+      ? parts.map((p, i) =>
+          p.highlight
+            ? <span key={i} style={{ color: C.orange }}>{p.text}</span>
+            : <span key={i}>{p.text}</span>
+        )
+      : children}
+  </h2>
 );
 
 const Hint = ({ children, light }) => (
@@ -650,7 +658,7 @@ export default function SurveyPage() {
           {slide.number != null && (
             <QuestionLabel number={slide.number} total={TOTAL_QUESTIONS} />
           )}
-          <QuestionText>{slide.question}</QuestionText>
+          <QuestionText parts={slide.questionParts}>{slide.question}</QuestionText>
 
           <div style={{ height: "24px" }} />
 

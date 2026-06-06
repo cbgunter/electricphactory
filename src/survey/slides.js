@@ -57,15 +57,19 @@ export const SLIDES = [
     type: "number",
     number: "4a",
     question: "How many events have you played in so far this year?",
-    min: 1,
+    min: 0,
     max: 8,
   },
   {
     id: "q4_2",
     type: "number",
     number: "4b",
-    question: "How many events did you want to play in?",
-    min: 1,
+    questionParts: [
+      { text: "How many events " },
+      { text: "did you want to", highlight: true },
+      { text: " play in?" },
+    ],
+    min: 0,
     max: 8,
   },
   {
