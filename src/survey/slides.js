@@ -91,10 +91,10 @@ export const SLIDES = [
     number: 5,
     question: 'If you could be one of the monsters from "Ahhh... Real Monsters", who would you be?',
     options: [
-      { key: "A", label: "Ickis" },
-      { key: "B", label: "Oblina" },
-      { key: "C", label: "Krumm" },
-      { key: "D", label: "The Gromble" },
+      { key: "A", label: "Ickis", emoji: "🐰" },
+      { key: "B", label: "Oblina", emoji: "🍬" },
+      { key: "C", label: "Krumm", emoji: "👁️" },
+      { key: "D", label: "The Gromble", emoji: "👠" },
     ],
   },
   {
@@ -103,10 +103,10 @@ export const SLIDES = [
     title: "The EP Monster Breakdown",
     questionId: "q5",
     options: [
-      { key: "A", label: "Ickis" },
-      { key: "B", label: "Oblina" },
-      { key: "C", label: "Krumm" },
-      { key: "D", label: "The Gromble" },
+      { key: "A", label: "Ickis", emoji: "🐰" },
+      { key: "B", label: "Oblina", emoji: "🍬" },
+      { key: "C", label: "Krumm", emoji: "👁️" },
+      { key: "D", label: "The Gromble", emoji: "👠" },
     ],
   },
   {

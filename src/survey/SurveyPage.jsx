@@ -331,7 +331,7 @@ function TextInput({ slide, value, onChange, onNext }) {
 
 function TransitionSlide({ slide, onNext }) {
   useEffect(() => {
-    const t = setTimeout(onNext, 2800);
+    const t = setTimeout(onNext, 4800);
     return () => clearTimeout(t);
   }, []);
 
@@ -468,22 +468,35 @@ function ResultsSlide({ slide, answers, onNext }) {
             {slide.options.map((opt) => {
               const count = counts[opt.key] || 0;
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+              const isYou = answers[slide.questionId] === opt.key;
               return (
                 <div key={opt.key}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "5px" }}>
-                    <span style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: `${C.cream}90` }}>
-                      <span style={{ fontFamily: "'Outfit'", fontWeight: 700, color: C.orange, marginRight: "8px" }}>
-                        {opt.key}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      {opt.emoji && <span style={{ fontSize: "18px" }}>{opt.emoji}</span>}
+                      <span style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: `${C.cream}90` }}>
+                        <span style={{ fontFamily: "'Outfit'", fontWeight: 700, color: C.orange, marginRight: "6px" }}>
+                          {opt.key}
+                        </span>
+                        {opt.label}
                       </span>
-                      {opt.label}
-                    </span>
-                    <span style={{ fontFamily: "'Outfit'", fontWeight: 700, fontSize: "14px", color: C.orange }}>
+                      {isYou && (
+                        <span style={{
+                          fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 700,
+                          color: C.green, background: C.orange,
+                          padding: "2px 7px", borderRadius: "4px",
+                          letterSpacing: "0.04em", textTransform: "uppercase",
+                        }}>You</span>
+                      )}
+                    </div>
+                    <span style={{ fontFamily: "'Outfit'", fontWeight: 700, fontSize: "14px", color: isYou ? C.orange : `${C.cream}60` }}>
                       {pct}%
                     </span>
                   </div>
                   <div style={{ height: "8px", background: `${C.cream}15`, borderRadius: "4px", overflow: "hidden" }}>
                     <div style={{
-                      height: "100%", background: answers[slide.questionId] === opt.key ? C.orange : `${C.cream}50`,
+                      height: "100%",
+                      background: isYou ? C.orange : `${C.cream}35`,
                       width: `${pct}%`, borderRadius: "4px",
                       transition: "width 0.8s ease",
                     }} />
