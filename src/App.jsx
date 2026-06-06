@@ -35,8 +35,9 @@ const mapCourses = [
   { name: "Glen Mills Golf Course", lat: 39.893, lng: -75.497 },
   { name: "Broad Run Golfers Club", lat: 39.960, lng: -75.665 },
   { name: "Paxon Hollow CC", lat: 39.918, lng: -75.397 },
-  { name: "Town & Country Golf Links", lat: 39.726, lng: -75.564 },
+  { name: "Town & Country Golf Links", lat: 39.653, lng: -75.332 },
   { name: "Rock Manor Golf Club", lat: 39.756, lng: -75.573 },
+  { name: "Makefield Highlands", lat: 40.228, lng: -74.887 },
 ];
 
 const RegionMap = () => (
