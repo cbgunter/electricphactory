@@ -127,6 +127,32 @@ const Hint = ({ children, light }) => (
 
 // --- Slide types ---
 
+function TitleSlide({ onNext }) {
+  return (
+    <SlideWrap dark>
+      <div style={{ textAlign: "center", maxWidth: "480px" }}>
+        <img
+          src="/logo.png"
+          alt="Electric Phactory"
+          style={{ width: "120px", marginBottom: "32px", opacity: 0.95 }}
+        />
+        <div style={{
+          fontFamily: "'Outfit'", fontWeight: 800, fontSize: "clamp(28px, 5vw, 42px)",
+          color: C.cream, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: "20px",
+        }}>Member Survey 2026</div>
+        <p style={{
+          fontFamily: "'DM Sans'", fontSize: "16px", color: `${C.cream}80`,
+          lineHeight: 1.75, marginBottom: "36px",
+        }}>
+          Thanks for taking 5 minutes to fill this out.<br />
+          Your input shapes how we run EP.
+        </p>
+        <Btn onClick={onNext}>Let's Go →</Btn>
+      </div>
+    </SlideWrap>
+  );
+}
+
 function SingleChoice({ slide, value, onChange, onNext }) {
   return (
     <div style={{ width: "100%", maxWidth: "640px" }}>
@@ -152,10 +178,12 @@ function SingleChoice({ slide, value, onChange, onNext }) {
                 color: selected ? C.orange : C.silver,
                 minWidth: "22px",
               }}>{opt.key}</span>
+              {opt.emoji && (
+                <span style={{ fontSize: "20px", lineHeight: 1 }}>{opt.emoji}</span>
+              )}
               <span style={{
                 fontFamily: "'DM Sans'", fontSize: "15px", fontWeight: 500,
-                color: selected ? C.green : C.green,
-                lineHeight: 1.4,
+                color: C.green, lineHeight: 1.4,
               }}>{opt.label}</span>
             </button>
           );
@@ -547,10 +575,6 @@ function DoneSlide() {
           Your responses are in. We'll use them to make the EP better.<br />
           Now go hit some balls.
         </p>
-        <div style={{
-          fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
-          letterSpacing: "0.1em", textTransform: "uppercase", color: C.orange,
-        }}>Electric Phactory · Est. 2021</div>
       </div>
     </SlideWrap>
   );
@@ -616,6 +640,15 @@ export default function SurveyPage() {
   if (!slide) return null;
 
   // Transition and special slides handle their own layout
+  if (slide.type === "title") {
+    return (
+      <>
+        <style>{`@keyframes fadeSlide { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+        <TitleSlide onNext={goNext} />
+      </>
+    );
+  }
+
   if (slide.type === "transition") {
     return (
       <>

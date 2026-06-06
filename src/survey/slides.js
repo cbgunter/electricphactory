@@ -3,6 +3,10 @@ export const API = "https://iaatvn44bj.execute-api.us-east-1.amazonaws.com";
 
 export const SLIDES = [
   {
+    id: "title",
+    type: "title",
+  },
+  {
     id: "q1",
     type: "single",
     number: 1,
