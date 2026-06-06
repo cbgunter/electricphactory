@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Branding
+
+See `electric-phactory-branding-guidelines.md` for the full spec. Key rules that affect code:
+- **Colors:** `C` palette in `App.jsx` — Midnight Green `#004C54`, Phactory Orange `#D4691C`, Warm Cream `#F5F0E8`, Sand `#EDE6DA`, Deep Green `#002B30`. No additional colors. `silver` (`#5C5955`) is used for body/secondary text (darkened from spec `#B8B5AF` for readability).
+- **Fonts:** Outfit (headings) + DM Sans (body). No third font, ever.
+- **Minimum text size: 12px.** Nothing rendered below this.
+- **Body text: 16px, line-height 1.75.** The `Body` component enforces this.
+- **No pure white backgrounds.** Warm Cream `#F5F0E8` is the default page background.
+
 ## Commands
 
 ```bash

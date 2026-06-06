@@ -69,7 +69,7 @@ const RegionMap = () => (
     {mapCourses.map((c, i) => (
       <g key={i}>
         <circle cx={c.x} cy={c.y} r="5" fill={C.orange} opacity="0.75" />
-        <text x={c.x + 8} y={c.y + 4} fontSize="9" fill={C.silver} fontFamily="'DM Sans'">{c.name}</text>
+        <text x={c.x + 8} y={c.y + 4} fontSize="11" fill={C.silver} fontFamily="'DM Sans'">{c.name}</text>
       </g>
     ))}
     {mapCities.map((c, i) => (
@@ -78,7 +78,7 @@ const RegionMap = () => (
         <text x={c.x + (c.main ? 13 : 9)} y={c.y + 4} fontSize={c.main ? "13" : "11"} fontWeight={c.main ? "700" : "400"} fill={c.main ? C.green : C.silver} fontFamily="'Outfit'">{c.name}</text>
       </g>
     ))}
-    <text x="10" y="370" fontSize="9" fill={C.silver} fontFamily="'DM Sans'" opacity="0.5">Coverage area — zip code heatmap coming soon</text>
+    <text x="10" y="370" fontSize="11" fill={C.silver} fontFamily="'DM Sans'" opacity="0.5">Coverage area — zip code heatmap coming soon</text>
   </svg>
 );
 
@@ -96,7 +96,7 @@ const Section = ({ children, bg, id }) => (
 
 const SectionLabel = ({ children }) => (
   <div style={{
-    fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 600,
+    fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
     letterSpacing: "0.14em", textTransform: "uppercase",
     color: C.orange, marginBottom: "10px",
   }}>{children}</div>
@@ -112,7 +112,7 @@ const H2 = ({ children, light }) => (
 
 const Body = ({ children, light }) => (
   <p style={{
-    fontFamily: "'DM Sans'", fontSize: "15px", lineHeight: 1.75,
+    fontFamily: "'DM Sans'", fontSize: "16px", lineHeight: 1.75,
     color: light ? `${C.cream}90` : C.silver,
     margin: "0 0 16px",
   }}>{children}</p>
@@ -129,7 +129,7 @@ const EventCard = ({ event }) => (
       background: C.green, borderRadius: "6px", padding: "8px 10px",
       textAlign: "center", flexShrink: 0, minWidth: "50px",
     }}>
-      <div style={{ fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 600, color: C.orange, letterSpacing: "0.06em" }}>
+      <div style={{ fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600, color: C.orange, letterSpacing: "0.06em" }}>
         {event.date.split(" ")[0]}
       </div>
       <div style={{ fontFamily: "'Outfit'", fontSize: "18px", fontWeight: 800, color: C.cream, lineHeight: 1.1 }}>
@@ -145,7 +145,7 @@ const EventCard = ({ event }) => (
       </div>
       <div style={{ display: "flex", gap: "8px", alignItems: "center", flexWrap: "wrap" }}>
         <span style={{
-          fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 600,
+          fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
           background: event.tag === "Individual" ? `${C.green}15` : `${C.orange}18`,
           color: event.tag === "Individual" ? C.green : C.orange,
           padding: "3px 8px", borderRadius: "4px", textTransform: "uppercase", letterSpacing: "0.04em",
@@ -213,7 +213,7 @@ export default function App() {
           {/* Left: headline + CTA */}
           <div>
             <div style={{
-              display: "inline-block", fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 600,
+              display: "inline-block", fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
               letterSpacing: "0.12em", textTransform: "uppercase",
               color: C.orange, background: `${C.orange}12`,
               padding: "6px 12px", borderRadius: "4px", marginBottom: "20px",
@@ -277,7 +277,7 @@ export default function App() {
                     color: C.orange, letterSpacing: "-0.02em",
                   }}>{s.num}</div>
                   <div style={{
-                    fontFamily: "'DM Sans'", fontSize: "10px",
+                    fontFamily: "'DM Sans'", fontSize: "12px",
                     color: `${C.cream}70`, marginTop: "3px",
                     textTransform: "uppercase", letterSpacing: "0.06em",
                   }}>{s.label}</div>
@@ -312,10 +312,10 @@ export default function App() {
             ].map((item, i) => (
               <div key={i} style={{ background: C.cream, borderRadius: "12px", padding: "18px" }}>
                 <div style={{ fontSize: "22px", marginBottom: "8px" }}>{item.icon}</div>
-                <div style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 700, color: C.green, marginBottom: "5px" }}>
+                <div style={{ fontFamily: "'Outfit'", fontSize: "14px", fontWeight: 700, color: C.green, marginBottom: "5px" }}>
                   {item.title}
                 </div>
-                <div style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.silver, lineHeight: 1.6 }}>
+                <div style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver, lineHeight: 1.6 }}>
                   {item.desc}
                 </div>
               </div>
@@ -464,7 +464,7 @@ export default function App() {
           {["Holderness & Bourne Collab", "EP Ball Markers", "Rope Hats — Coming Soon"].map((item, i) => (
             <div key={i} style={{
               background: C.sand, borderRadius: "10px", padding: "14px 20px",
-              fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600, color: C.green,
+              fontFamily: "'Outfit'", fontSize: "14px", fontWeight: 600, color: C.green,
             }}>{item}</div>
           ))}
         </div>
