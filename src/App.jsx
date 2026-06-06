@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 const C = {
   cream: "#F5F0E8", green: "#004C54", orange: "#D4691C",
@@ -27,49 +29,56 @@ const specialEvents = [
   { date: "FALL", name: "EP Ryder Cup", sub: "Foursomes, four-ball, and singles over a full weekend" },
 ];
 
-const mapPhilly = { name: "Philadelphia", x: 310, y: 165 };
-
 const mapCourses = [
-  { name: "Wyncote", x: 330, y: 120 },
-  { name: "Jeffersonville", x: 265, y: 100 },
-  { name: "Glen Mills", x: 250, y: 200 },
-  { name: "Broad Run", x: 185, y: 170 },
-  { name: "Paxon Hollow", x: 290, y: 165 },
-  { name: "Town & Country", x: 340, y: 75 },
-  { name: "Rock Manor", x: 230, y: 270 },
+  { name: "Wyncote Golf Club", lat: 39.804, lng: -75.978 },
+  { name: "Jeffersonville Golf Club", lat: 40.138, lng: -75.432 },
+  { name: "Glen Mills Golf Course", lat: 39.893, lng: -75.497 },
+  { name: "Broad Run Golfers Club", lat: 39.960, lng: -75.665 },
+  { name: "Paxon Hollow CC", lat: 39.918, lng: -75.397 },
+  { name: "Town & Country Golf Links", lat: 39.726, lng: -75.564 },
+  { name: "Rock Manor Golf Club", lat: 39.756, lng: -75.573 },
 ];
 
 const RegionMap = () => (
-  <svg viewBox="0 0 460 360" style={{ width: "100%", maxWidth: "500px" }}>
-    <defs>
-      <radialGradient id="heatGrad" cx="62%" cy="46%" r="50%">
-        <stop offset="0%" stopColor={C.orange} stopOpacity="0.32" />
-        <stop offset="50%" stopColor={C.green} stopOpacity="0.16" />
-        <stop offset="100%" stopColor={C.green} stopOpacity="0.05" />
-      </radialGradient>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="2" result="blur" />
-        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-      </filter>
-    </defs>
-    <ellipse
-      cx="245" cy="185" rx="195" ry="155"
-      fill="url(#heatGrad)"
-      stroke={C.green}
-      strokeWidth="1.5"
-      strokeOpacity="0.25"
-      strokeDasharray="6,4"
+  <MapContainer
+    center={[39.93, -75.50]}
+    zoom={10}
+    scrollWheelZoom={false}
+    zoomControl={true}
+    style={{ height: "400px", width: "100%", borderRadius: "12px" }}
+  >
+    <TileLayer
+      url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      subdomains="abcd"
+      maxZoom={19}
     />
     {mapCourses.map((c, i) => (
-      <g key={i}>
-        <circle cx={c.x} cy={c.y} r="5" fill={C.orange} opacity="0.75" />
-        <text x={c.x + 8} y={c.y + 4} fontSize="11" fill={C.silver} fontFamily="'DM Sans'">{c.name}</text>
-      </g>
+      <CircleMarker
+        key={i}
+        center={[c.lat, c.lng]}
+        radius={8}
+        fillColor={C.orange}
+        fillOpacity={0.85}
+        color="#fff"
+        weight={1.5}
+      >
+        <Tooltip direction="top" offset={[0, -6]}>{c.name}</Tooltip>
+      </CircleMarker>
     ))}
-    <circle cx={mapPhilly.x} cy={mapPhilly.y} r="8" fill={C.orange} filter="url(#glow)" />
-    <text x={mapPhilly.x + 13} y={mapPhilly.y + 4} fontSize="13" fontWeight="700" fill={C.green} fontFamily="'Outfit'">{mapPhilly.name}</text>
-    <text x="10" y="350" fontSize="11" fill={C.silver} fontFamily="'DM Sans'" opacity="0.5">Member zip code heatmap coming soon</text>
-  </svg>
+    <CircleMarker
+      center={[39.9526, -75.1652]}
+      radius={10}
+      fillColor={C.green}
+      fillOpacity={0.95}
+      color="#fff"
+      weight={2}
+    >
+      <Tooltip permanent direction="right" offset={[8, 0]} opacity={1}>
+        <span style={{ fontFamily: "'Outfit'", fontWeight: 700, fontSize: "13px" }}>Philadelphia</span>
+      </Tooltip>
+    </CircleMarker>
+  </MapContainer>
 );
 
 const Container = ({ children }) => (
@@ -349,18 +358,12 @@ export default function App() {
         <Body>
           We're based in the Greater Philadelphia area and draw members from across Delaware and southern New Jersey. If you can make the drive and stay for a beer, you're in range.
         </Body>
-        <div style={{
-          background: C.sand, borderRadius: "14px", padding: "24px",
-          display: "flex", justifyContent: "center",
-        }}>
+        <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: `0 2px 12px ${C.green}18` }}>
           <RegionMap />
         </div>
-        <div style={{ display: "flex", gap: "20px", marginTop: "14px", justifyContent: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <div style={{ width: "9px", height: "9px", borderRadius: "50%", background: C.orange }} />
-            <span style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver }}>EP Courses</span>
-          </div>
-        </div>
+        <p style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver, marginTop: "10px", textAlign: "center", opacity: 0.7 }}>
+          Member zip code heatmap coming soon
+        </p>
       </Section>
 
       {/* EVENTS */}
