@@ -562,16 +562,30 @@ function getVisibleSlides(answers) {
   return SLIDES.filter((s) => !s.show || s.show(answers));
 }
 
+const STORAGE_KEY = `ep-survey-${SURVEY_ID}`;
+
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
 export default function SurveyPage() {
-  const [answers, setAnswers] = useState({});
-  const [idx, setIdx] = useState(0);
+  const saved = loadSaved();
+  const [answers, setAnswers] = useState(saved?.answers ?? {});
+  const [idx, setIdx] = useState(saved?.idx ?? 0);
   const [submitting, setSubmitting] = useState(false);
   const submitted = useRef(false);
 
   const visible = getVisibleSlides(answers);
   const slide = visible[idx];
 
-  const setAnswer = (id, value) => setAnswers((prev) => ({ ...prev, [id]: value }));
+  const setAnswer = (id, value) => setAnswers((prev) => {
+    const next = { ...prev, [id]: value };
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers: next, idx })); } catch {}
+    return next;
+  });
 
   const goNext = async () => {
     // Submit when leaving q13
@@ -585,6 +599,7 @@ export default function SurveyPage() {
           body: JSON.stringify({ surveyId: SURVEY_ID, answers }),
         });
       } catch { /* best effort */ }
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
       setSubmitting(false);
     }
 
@@ -592,7 +607,10 @@ export default function SurveyPage() {
     const nextAnswers = answers;
     const nextVisible = getVisibleSlides(nextAnswers);
     const nextIdx = idx + 1;
-    if (nextIdx < nextVisible.length) setIdx(nextIdx);
+    if (nextIdx < nextVisible.length) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ answers, idx: nextIdx })); } catch {}
+      setIdx(nextIdx);
+    }
   };
 
   if (!slide) return null;
