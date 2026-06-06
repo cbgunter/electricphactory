@@ -27,14 +27,7 @@ const specialEvents = [
   { date: "FALL", name: "EP Ryder Cup", sub: "Foursomes, four-ball, and singles over a full weekend" },
 ];
 
-const mapCities = [
-  { name: "Philadelphia", x: 310, y: 165, main: true },
-  { name: "Lancaster", x: 55, y: 110, main: false },
-  { name: "Newtown", x: 370, y: 55, main: false },
-  { name: "Glassboro", x: 340, y: 320, main: false },
-  { name: "Wilmington", x: 225, y: 280, main: false },
-  { name: "Oxford", x: 130, y: 265, main: false },
-];
+const mapPhilly = { name: "Philadelphia", x: 310, y: 165 };
 
 const mapCourses = [
   { name: "Wyncote", x: 330, y: 120 },
@@ -47,24 +40,24 @@ const mapCourses = [
 ];
 
 const RegionMap = () => (
-  <svg viewBox="0 0 460 380" style={{ width: "100%", maxWidth: "500px" }}>
+  <svg viewBox="0 0 460 360" style={{ width: "100%", maxWidth: "500px" }}>
     <defs>
-      <radialGradient id="heatGrad" cx="65%" cy="45%" r="55%">
-        <stop offset="0%" stopColor={C.orange} stopOpacity="0.35" />
-        <stop offset="50%" stopColor={C.green} stopOpacity="0.18" />
-        <stop offset="100%" stopColor={C.green} stopOpacity="0.06" />
+      <radialGradient id="heatGrad" cx="62%" cy="46%" r="50%">
+        <stop offset="0%" stopColor={C.orange} stopOpacity="0.32" />
+        <stop offset="50%" stopColor={C.green} stopOpacity="0.16" />
+        <stop offset="100%" stopColor={C.green} stopOpacity="0.05" />
       </radialGradient>
       <filter id="glow">
         <feGaussianBlur stdDeviation="2" result="blur" />
         <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
       </filter>
     </defs>
-    <polygon
-      points="55,110 370,55 340,320 225,280 130,265"
+    <ellipse
+      cx="245" cy="185" rx="195" ry="155"
       fill="url(#heatGrad)"
       stroke={C.green}
       strokeWidth="1.5"
-      strokeOpacity="0.3"
+      strokeOpacity="0.25"
       strokeDasharray="6,4"
     />
     {mapCourses.map((c, i) => (
@@ -73,13 +66,9 @@ const RegionMap = () => (
         <text x={c.x + 8} y={c.y + 4} fontSize="11" fill={C.silver} fontFamily="'DM Sans'">{c.name}</text>
       </g>
     ))}
-    {mapCities.map((c, i) => (
-      <g key={i}>
-        <circle cx={c.x} cy={c.y} r={c.main ? 8 : 5} fill={c.main ? C.orange : C.green} filter={c.main ? "url(#glow)" : undefined} />
-        <text x={c.x + (c.main ? 13 : 9)} y={c.y + 4} fontSize={c.main ? "13" : "11"} fontWeight={c.main ? "700" : "400"} fill={c.main ? C.green : C.silver} fontFamily="'Outfit'">{c.name}</text>
-      </g>
-    ))}
-    <text x="10" y="370" fontSize="11" fill={C.silver} fontFamily="'DM Sans'" opacity="0.5">Coverage area — zip code heatmap coming soon</text>
+    <circle cx={mapPhilly.x} cy={mapPhilly.y} r="8" fill={C.orange} filter="url(#glow)" />
+    <text x={mapPhilly.x + 13} y={mapPhilly.y + 4} fontSize="13" fontWeight="700" fill={C.green} fontFamily="'Outfit'">{mapPhilly.name}</text>
+    <text x="10" y="350" fontSize="11" fill={C.silver} fontFamily="'DM Sans'" opacity="0.5">Member zip code heatmap coming soon</text>
   </svg>
 );
 
@@ -356,9 +345,9 @@ export default function App() {
       {/* REGION MAP */}
       <Section>
         <SectionLabel>Our Region</SectionLabel>
-        <H2>From Lancaster to the Shore.</H2>
+        <H2>Greater Philly, Delaware & South Jersey.</H2>
         <Body>
-          We cover southeastern Pennsylvania, northern Delaware, and southern New Jersey. Members play courses from Oxford to Newtown, Wilmington to Glassboro — anywhere within driving distance of a post-round beer.
+          We're based in the Greater Philadelphia area and draw members from across Delaware and southern New Jersey. If you can make the drive and stay for a beer, you're in range.
         </Body>
         <div style={{
           background: C.sand, borderRadius: "14px", padding: "24px",
@@ -369,11 +358,7 @@ export default function App() {
         <div style={{ display: "flex", gap: "20px", marginTop: "14px", justifyContent: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <div style={{ width: "9px", height: "9px", borderRadius: "50%", background: C.orange }} />
-            <span style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver }}>2026 Courses</span>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <div style={{ width: "9px", height: "9px", borderRadius: "50%", background: C.green }} />
-            <span style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver }}>Boundary Cities</span>
+            <span style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver }}>EP Courses</span>
           </div>
         </div>
       </Section>
