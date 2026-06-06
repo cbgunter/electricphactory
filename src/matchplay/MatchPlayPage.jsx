@@ -120,6 +120,13 @@ function generateBracket(allStandings, matches) {
 
 function fmtDiff(d) { return d === 0 ? "0" : d > 0 ? `+${d}` : `${d}`; }
 
+function displayName(name) {
+  if (!name || name === "TBD") return name;
+  const parts = name.trim().split(/\s+/);
+  if (parts.length === 1) return name;
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+}
+
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function BracketMatchCard({ match, label, isFinal }) {
@@ -159,7 +166,7 @@ function BracketMatchCard({ match, label, isFinal }) {
                   fontFamily: "'Outfit'", fontSize: "14px", fontWeight: isWinner ? 700 : 500,
                   color: isFinal ? (isWinner ? C.orange : C.cream) : (isWinner ? C.orange : C.green),
                 }}>
-                  {player}
+                  {displayName(player)}
                 </span>
                 {isWinner && (
                   <span style={{ fontFamily: "'DM Sans'", fontSize: "11px", color: C.orange, marginLeft: "8px", whiteSpace: "nowrap" }}>
@@ -178,7 +185,7 @@ function BracketMatchCard({ match, label, isFinal }) {
           fontFamily: "'DM Sans'", fontSize: "11px",
           color: isFinal ? `${C.cream}60` : C.silver,
         }}>
-          {match.isTie ? "Halved" : `${match.winner} wins ${match.differential} up`}
+          {match.isTie ? "Halved" : `${displayName(match.winner)} wins ${match.differential} up`}
         </div>
       )}
     </div>
@@ -246,7 +253,7 @@ function GroupCard({ groupKey, standings, matches }) {
                   {s.rank}
                 </td>
                 <td style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: isQ ? 700 : 500, color: C.green, padding: "8px 12px 8px 8px" }}>
-                  {s.name}
+                  {displayName(s.name)}
                   {isQ && <span style={{ marginLeft: "6px", fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 700, color: C.orange, background: `${C.orange}18`, padding: "1px 5px", borderRadius: "3px" }}>Q</span>}
                   {isE && <span style={{ marginLeft: "6px", fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 700, color: C.silver, background: `${C.silver}18`, padding: "1px 5px", borderRadius: "3px" }}>E</span>}
                 </td>
@@ -484,7 +491,7 @@ export default function MatchPlayPage() {
                       Tournament Champion
                     </div>
                     <div style={{ fontFamily: "'Outfit'", fontSize: "22px", fontWeight: 800, color: C.cream }}>
-                      {bracket.final.winner}
+                      {displayName(bracket.final.winner)}
                     </div>
                   </div>
                 )}
