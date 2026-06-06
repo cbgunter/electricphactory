@@ -42,8 +42,8 @@ const mapCourses = [
 
 const RegionMap = () => (
   <MapContainer
-    center={[39.93, -75.50]}
-    zoom={10}
+    center={[39.94, -75.43]}
+    zoom={9}
     scrollWheelZoom={false}
     zoomControl={true}
     style={{ height: "400px", width: "100%", borderRadius: "12px" }}
