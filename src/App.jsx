@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const C = {
   cream: "#F5F0E8", green: "#004C54", orange: "#D4691C",
@@ -163,6 +164,7 @@ const EventCard = ({ event }) => (
 
 export default function App() {
   const [eventsTab, setEventsTab] = useState("all");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const allEvents = [...teamEvents, ...indivEvents].sort((a, b) => {
     const months = { MAR: 3, APR: 4, MAY: 5, JUN: 6, JUL: 7, AUG: 8 };
@@ -203,8 +205,35 @@ export default function App() {
                 textDecoration: "none", fontWeight: 500,
               }}>{n}</a>
             ))}
+            <Link to="/matchplay" style={{
+              fontFamily: "'DM Sans'", fontSize: "14px", color: C.orange,
+              textDecoration: "none", fontWeight: 600,
+            }}>Match Play</Link>
           </div>
+          <button className="ep-hamburger" onClick={() => setMenuOpen(m => !m)} aria-label="Toggle menu">
+            <span className="ep-hamburger-line" style={{ background: C.green }} />
+            <span className="ep-hamburger-line" style={{ background: C.green }} />
+            <span className="ep-hamburger-line" style={{ background: C.green }} />
+          </button>
         </div>
+        {menuOpen && (
+          <div style={{
+            borderTop: `1px solid ${C.sand}`, padding: "16px 32px",
+            display: "flex", flexDirection: "column", gap: "18px",
+            background: `${C.cream}f8`,
+          }}>
+            {[["Events", "#events"], ["About", "#about"], ["Join", "#join"]].map(([label, href]) => (
+              <a key={label} href={href} onClick={() => setMenuOpen(false)} style={{
+                fontFamily: "'DM Sans'", fontSize: "16px", color: C.silver,
+                textDecoration: "none", fontWeight: 500,
+              }}>{label}</a>
+            ))}
+            <Link to="/matchplay" onClick={() => setMenuOpen(false)} style={{
+              fontFamily: "'DM Sans'", fontSize: "16px", color: C.orange,
+              textDecoration: "none", fontWeight: 600,
+            }}>Match Play</Link>
+          </div>
+        )}
       </nav>
 
       {/* HERO */}
@@ -513,12 +542,16 @@ export default function App() {
             Inaugural Roost Club Champions. Three-time Northeast Regional winners. 335 members and counting. There's something beautiful about meaningless — but structured — competition between peers.
           </p>
           <div style={{ display: "flex", gap: "24px", marginBottom: "20px", flexWrap: "wrap" }}>
-            {["Schedule", "Join", "Leaderboard", "Match Play", "Refuge"].map((link) => (
-              <span key={link} style={{
+            {[["Schedule", "#events"], ["Join", "#join"]].map(([label, href]) => (
+              <a key={label} href={href} style={{
                 fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600,
-                color: C.orange, cursor: "pointer",
-              }}>{link}</span>
+                color: C.orange, textDecoration: "none",
+              }}>{label}</a>
             ))}
+            <Link to="/matchplay" style={{
+              fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600,
+              color: C.orange, textDecoration: "none",
+            }}>Match Play</Link>
           </div>
           <div style={{ borderTop: `1px solid ${C.cream}10`, paddingTop: "14px" }}>
             <span style={{ fontFamily: "'DM Sans'", fontSize: "11px", color: `${C.cream}35` }}>

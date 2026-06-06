@@ -1,0 +1,62 @@
+# EP Match Play Tournament - Match Results
+# Format: Group|Player1|Player2|Winner|Differential
+# Winner: Full name of winner, or "TIE" for halved matches
+# Differential: Number of holes (e.g., "5&3" = 5, "2 up" = 2)
+
+# GROUP 1 - THE JAWNS
+THEJAWNS|Craig Boge|Evan Cannon|Craig Boge|5
+THEJAWNS|Andy Flexon|Athanasi Kourkoulis|Andy Flexon|2
+THEJAWNS|Andy Flexon|Eamon Mccarren|Andy Flexon|5
+THEJAWNS|Andy Flexon|Craig Boge|Andy Flexon|2
+THEJAWNS|Andy Flexon|Alan Miteer|Andy Flexon|6
+THEJAWNS|Craig Boge|Alan Miteer|Craig Boge|8
+THEJAWNS|Athanasi Kourkoulis|Alan Miteer|Athanasi Kourkoulis|3
+THEJAWNS|Craig Boge|Athanasi Kourkoulis|Craig Boge|4
+
+# GROUP 2 - YOUSE GUNNAS
+YOUSEGUNNAS|Corey Gunter|Vishal Kadamandla|Corey Gunter|3
+YOUSEGUNNAS|Corey Gunter|Ryan DeAscanis|Corey Gunter|2
+YOUSEGUNNAS|Ryan Fogelsong|Corey Gunter|Ryan Fogelsong|7
+YOUSEGUNNAS|Mike Revak|Corey Gunter|Mike Revak|5
+YOUSEGUNNAS|Ryan Fogelsong|Ryan DeAscanis|Ryan Fogelsong|7
+YOUSEGUNNAS|Mike Revak|Ryan DeAscanis|Mike Revak|7
+YOUSEGUNNAS|Mike Revak|Ryan Fogelsong|Mike Revak|2
+YOUSEGUNNAS|Brendan Hoover|Corey Gunter|Brendan Hoover|2
+YOUSEGUNNAS|Andrew Crowe|Vishal Kadamandla|Andrew Crowe|4
+YOUSEGUNNAS|Brendan Hoover|Vishal Kadamandla|Brendan Hoover|4
+YOUSEGUNNAS|Brendan Hoover|Andrew Crowe|Brendan Hoover|5
+YOUSEGUNNAS|Bob Taylor|Brendan Hoover|Bob Taylor|4
+YOUSEGUNNAS|Andrew Crowe|Ryan DeAscanis|Andrew Crowe|2
+YOUSEGUNNAS|Andrew Crowe|Mike Revak|TIE|0
+YOUSEGUNNAS|Mike Revak|Brendan Hoover|TIE|0
+
+# GROUP 3 - DOWN A SHORE
+DOWNASHORE|Ben Chambers|Wesley Davis|Ben Chambers|2
+DOWNASHORE|Ben Chambers|Kevin Reynolds|Ben Chambers|2
+DOWNASHORE|Ben Chambers|William James|Ben Chambers|2
+DOWNASHORE|Riley Krupen|Adam Yoder|Riley Krupen|3
+DOWNASHORE|Riley Krupen|Ben Chambers|Riley Krupen|1
+DOWNASHORE|Ben Chambers|Adam Yoder|Ben Chambers|6
+
+# GROUP 4 - WOODERHAZARD
+WOODERHAZARD|Colm Parrish|Matt Tyblewski|Colm Parrish|3
+WOODERHAZARD|Colm Parrish|Brian Armour|Colm Parrish|4
+WOODERHAZARD|Matt Tyblewski|Brian Armour|Matt Tyblewski|3
+WOODERHAZARD|Justin Gannon|Kiaran Leary|Justin Gannon|4
+WOODERHAZARD|Matt Tyblewski|Justin Gannon|Matt Tyblewski|5
+WOODERHAZARD|Matt Tyblewski|Kiaran Leary|Matt Tyblewski|3
+WOODERHAZARD|Adam Bucci|Brian Armour|Adam Bucci|3
+WOODERHAZARD|Kiaran Leary|Brian Armour|Kiaran Leary|1
+WOODERHAZARD|Kiaran Leary|Adam Bucci|TIE|0
+WOODERHAZARD|Matt Tyblewski|Jared Keating|TIE|0
+WOODERHAZARD|Jared Keating|Adam Bucci|Jared Keating|5
+WOODERHAZARD|Jared Keating|Justin Gannon|Jared Keating|5
+WOODERHAZARD|Adam Bucci|Justin Gannon|Adam Bucci|2
+WOODERHAZARD|Jake Borer|Brian Armour|TIE|0
+WOODERHAZARD|Colm Parrish|Jake Borer|Colm Parrish|5
+
+# PLAYOFF MATCHES
+# Format: QUARTER|Player1|Player2|Winner|Differential
+# Format: SEMI|Player1|Player2|Winner|Differential
+# Format: FINAL|Player1|Player2|Winner|Differential
+# Add matches here as tournament progresses
