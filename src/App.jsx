@@ -487,7 +487,7 @@ export default function App() {
         <SectionLabel>The Gear</SectionLabel>
         <H2>Rep the Phactory.</H2>
         <Body>
-          We partnered with Holderness & Bourne for our first run of EP-branded merchandise. More drops coming from their Spring 2026 collection. Stay tuned on Slack.
+          We partnered with Holderness & Bourne for our first run of EP-branded merchandise. More drops coming from their Spring 2026 collection. Stay tuned on Unknown Golf.
         </Body>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           {["Holderness & Bourne Collab", "EP Ball Markers", "Rope Hats — Coming Soon"].map((item, i) => (
@@ -504,20 +504,22 @@ export default function App() {
         <SectionLabel>Get Involved</SectionLabel>
         <H2>Join the Electric Phactory.</H2>
         <Body>
-          Find us on the NLU Refuge Philly/DE Roll Call thread, join our Slack, and show up to an event. No dues. $5 per event entry. That's it.
+          Find us on the NLU Refuge Philly/DE Roll Call thread, join us on Unknown Golf, and show up to an event. No dues. $5 per event entry. That's it.
         </Body>
         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-          <button style={{
+          <a href="https://refuge.nolayingup.com/t/philadelphia/6998/1192" target="_blank" rel="noopener noreferrer" style={{
             fontFamily: "'Outfit'", fontWeight: 700, fontSize: "14px",
             background: C.orange, color: "#fff",
             border: "none", borderRadius: "8px", padding: "14px 28px", cursor: "pointer",
-          }}>Join the Refuge Roll Call</button>
-          <button style={{
+            textDecoration: "none", display: "inline-block",
+          }}>Join the Refuge Roll Call</a>
+          <a href="https://league.unknowngolf.com/index.jsp" target="_blank" rel="noopener noreferrer" style={{
             fontFamily: "'Outfit'", fontWeight: 600, fontSize: "14px",
             background: "none", color: C.green,
             border: `1.5px solid ${C.green}30`, borderRadius: "8px",
             padding: "14px 28px", cursor: "pointer",
-          }}>Join Slack</button>
+            textDecoration: "none", display: "inline-block",
+          }}>Find Us on Unknown Golf</a>
         </div>
       </Section>
 
