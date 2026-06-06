@@ -21,6 +21,13 @@ function weatherEmoji(code) {
   return "🌡️";
 }
 
+function weatherCTA(code, temp) {
+  const isNice = code <= 3 && temp >= 45;
+  return isNice
+    ? "Go book a tee time."
+    : "Practice your swing in the mirror.";
+}
+
 function weatherDesc(code) {
   if (code === 0) return "Clear skies";
   if (code <= 2) return "Partly cloudy";
@@ -415,6 +422,7 @@ function WeatherSlide({ answers, onNext }) {
 
   const emoji = weatherEmoji(data.code);
   const desc = weatherDesc(data.code);
+  const cta = weatherCTA(data.code, data.temp);
 
   return (
     <SlideWrap>
@@ -427,9 +435,13 @@ function WeatherSlide({ answers, onNext }) {
         <div style={{ fontFamily: "'Outfit'", fontWeight: 600, fontSize: "18px", color: C.orange, marginBottom: "6px" }}>
           {desc}
         </div>
-        <div style={{ fontFamily: "'DM Sans'", fontSize: "16px", color: C.silver, marginBottom: "36px" }}>
+        <div style={{ fontFamily: "'DM Sans'", fontSize: "16px", color: C.silver, marginBottom: "20px" }}>
           {data.city}, {data.state}
         </div>
+        <div style={{
+          fontFamily: "'Outfit'", fontWeight: 700, fontSize: "18px",
+          color: C.orange, marginBottom: "32px",
+        }}>{cta}</div>
         <Btn onClick={onNext}>Continue →</Btn>
       </div>
     </SlideWrap>
