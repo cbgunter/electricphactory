@@ -165,20 +165,22 @@ function SingleChoice({ slide, value, onChange, onNext }) {
   );
 }
 
-function MultiSelect({ slide, value = [], onChange, onNext }) {
-  const [otherText, setOtherText] = useState("");
+function MultiSelect({ slide, value, onChange, onNext }) {
+  const keys = value?.keys ?? (Array.isArray(value) ? value : []);
+  const [otherText, setOtherText] = useState(value?.other ?? "");
+
   const toggle = (key) => {
-    const next = value.includes(key) ? value.filter((k) => k !== key) : [...value, key];
-    onChange(next, key === "H" ? otherText : undefined);
+    const nextKeys = keys.includes(key) ? keys.filter((k) => k !== key) : [...keys, key];
+    onChange({ keys: nextKeys, other: otherText });
   };
-  const canNext = value.length > 0;
+  const canNext = keys.length > 0;
 
   return (
     <div style={{ width: "100%", maxWidth: "640px" }}>
       {slide.hint && <Hint>{slide.hint}</Hint>}
       <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "24px" }}>
         {slide.options.map((opt) => {
-          const selected = value.includes(opt.key);
+          const selected = keys.includes(opt.key);
           return (
             <div key={opt.key}>
               <button
@@ -208,7 +210,7 @@ function MultiSelect({ slide, value = [], onChange, onNext }) {
                 <input
                   placeholder="Tell us more..."
                   value={otherText}
-                  onChange={(e) => { setOtherText(e.target.value); onChange(value, e.target.value); }}
+                  onChange={(e) => { setOtherText(e.target.value); onChange({ keys, other: e.target.value }); }}
                   style={{
                     marginTop: "6px", width: "100%", padding: "12px 16px",
                     fontFamily: "'DM Sans'", fontSize: "15px", color: C.green,
@@ -674,7 +676,7 @@ export default function SurveyPage() {
             <MultiSelect
               slide={slide}
               value={value}
-              onChange={(keys, otherText) => setAnswer(slide.id, otherText != null ? { keys, other: otherText } : keys)}
+              onChange={(v) => setAnswer(slide.id, v)}
               onNext={goNext}
             />
           )}
