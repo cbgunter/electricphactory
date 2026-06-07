@@ -59,4 +59,9 @@ WOODERHAZARD|Colm Parrish|Jake Borer|Colm Parrish|5
 # Format: QUARTER|Player1|Player2|Winner|Differential
 # Format: SEMI|Player1|Player2|Winner|Differential
 # Format: FINAL|Player1|Player2|Winner|Differential
-# Add matches here as tournament progresses
+
+# QUARTERFINALS (order matters — QF1 through QF4)
+QUARTER|Andy Flexon|Brendan Hoover|Brendan Hoover|5
+QUARTER|Mike Revak|Craig Boge|TBD|0
+QUARTER|Ben Chambers|Colm Parrish|TBD|0
+QUARTER|Matt Tyblewski|Riley Krupen|Riley Krupen|0

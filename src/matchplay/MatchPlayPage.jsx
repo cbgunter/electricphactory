@@ -185,7 +185,7 @@ function BracketMatchCard({ match, label, isFinal }) {
           fontFamily: "'DM Sans'", fontSize: "11px",
           color: isFinal ? `${C.cream}60` : C.silver,
         }}>
-          {match.isTie ? "Halved" : `${displayName(match.winner)} wins ${match.differential} up`}
+          {match.isTie ? "Halved" : `${displayName(match.winner)} wins${match.differential > 0 ? ` ${match.differential} up` : ""}`}
         </div>
       )}
     </div>
