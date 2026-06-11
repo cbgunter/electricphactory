@@ -169,4 +169,4 @@ export const SLIDES = [
   },
 ];
 
-export const TOTAL_QUESTIONS = SLIDES.filter((s) => s.number !== undefined).length;
+export const TOTAL_QUESTIONS = 11;
