@@ -94,33 +94,9 @@ export const SLIDES = [
     ],
   },
   {
-    id: "q5",
-    type: "single",
-    number: 5,
-    question: 'If you could be one of the monsters from "Ahhh... Real Monsters", who would you be?',
-    options: [
-      { key: "A", label: "Ickis", emoji: "🐰" },
-      { key: "B", label: "Oblina", emoji: "🍬" },
-      { key: "C", label: "Krumm", emoji: "👁️" },
-      { key: "D", label: "The Gromble", emoji: "👠" },
-    ],
-  },
-  {
-    id: "results_q5",
-    type: "results",
-    title: "The EP Monster Breakdown",
-    questionId: "q5",
-    options: [
-      { key: "A", label: "Ickis", emoji: "🐰" },
-      { key: "B", label: "Oblina", emoji: "🍬" },
-      { key: "C", label: "Krumm", emoji: "👁️" },
-      { key: "D", label: "The Gromble", emoji: "👠" },
-    ],
-  },
-  {
     id: "q6",
     type: "single",
-    number: 6,
+    number: 5,
     question: "What's the most you're comfortable spending per round for a group event (greens fees only)?",
     options: [
       { key: "A", label: "Under $50" },
@@ -133,28 +109,15 @@ export const SLIDES = [
   {
     id: "q7",
     type: "rating",
-    number: 7,
+    number: 6,
     question: "Do you care about playing a nicer course, or would you rather play a goat track with your best buds?",
     leftLabel: "Give me the Delcastle\nand some beers",
     rightLabel: "Merion\nor GTFO",
   },
   {
-    id: "q8",
-    type: "single",
-    number: 8,
-    question: "Who is your favorite golfer?",
-    options: [{ key: "A", label: "Mike Revak" }],
-  },
-  {
-    id: "t_revak",
-    type: "transition",
-    text: "Yeah, we thought so.",
-    sub: null,
-  },
-  {
     id: "q9",
     type: "single",
-    number: 9,
+    number: 7,
     question: "Are you currently involved in any other regular golf commitments?",
     hint: "Leagues, standing tee times, other groups",
     options: [
@@ -166,7 +129,7 @@ export const SLIDES = [
   {
     id: "q10",
     type: "single",
-    number: 10,
+    number: 8,
     question: "If you were a cartoon character on the golf course, which would you be?",
     options: [
       { key: "A", label: "Inspector Gadget — lots of equipment, rarely works as intended" },
@@ -179,7 +142,7 @@ export const SLIDES = [
   {
     id: "q11",
     type: "rating",
-    number: 11,
+    number: 9,
     question: "Would you be down for an EP road trip?",
     leftLabel: "Nah, that\nwouldn't be fun",
     rightLabel: "Hell yeah,\nbrother!",
@@ -187,7 +150,7 @@ export const SLIDES = [
   {
     id: "q12",
     type: "text",
-    number: 12,
+    number: 10,
     question: "Is there anything about how we run events that you'd change?",
     hint: "Even small things count. Optional.",
     optional: true,
@@ -195,7 +158,7 @@ export const SLIDES = [
   {
     id: "q13",
     type: "text",
-    number: 13,
+    number: 11,
     question: "Anything else you want us to know?",
     hint: "Optional.",
     optional: true,
