@@ -40,20 +40,22 @@ const mapCourses = [
   { name: "Makefield Highlands", lat: 40.228, lng: -74.887 },
 ];
 
-// Survey member zip codes (PA only, excluding NJ & out-of-area)
+// Survey member locations (PA only, excluding NJ & out-of-area)
 const memberZips = [
-  { zip: "19147", lat: 39.9526, lng: -75.1652, count: 2 },
-  { zip: "19711", lat: 39.8235, lng: -75.5847, count: 1 },
-  { zip: "19380", lat: 39.8900, lng: -75.3289, count: 2 },
-  { zip: "19072", lat: 39.8812, lng: -75.4950, count: 1 },
-  { zip: "19007", lat: 39.9389, lng: -75.5089, count: 1 },
-  { zip: "19067", lat: 39.8945, lng: -75.4512, count: 1 },
-  { zip: "19390", lat: 40.1245, lng: -75.4967, count: 1 },
-  { zip: "19335", lat: 39.8745, lng: -75.4189, count: 1 },
-  { zip: "19428", lat: 40.2134, lng: -75.3850, count: 1 },
-  { zip: "19810", lat: 39.7834, lng: -75.3945, count: 1 },
-  { zip: "19014", lat: 39.8134, lng: -75.3278, count: 1 },
-  { zip: "19038", lat: 40.0234, lng: -75.1456, count: 1 },
+  { zip: "19147", lat: 39.9526, lng: -75.1652 },
+  { zip: "19711", lat: 39.8235, lng: -75.5847 },
+  { zip: "19380", lat: 39.8900, lng: -75.3289 },
+  { zip: "19072", lat: 39.8812, lng: -75.4950 },
+  { zip: "19007", lat: 39.9389, lng: -75.5089 },
+  { zip: "19067", lat: 39.8945, lng: -75.4512 },
+  { zip: "19390", lat: 40.1245, lng: -75.4967 },
+  { zip: "19335", lat: 39.8745, lng: -75.4189 },
+  { zip: "19428", lat: 40.2134, lng: -75.3850 },
+  { zip: "19810", lat: 39.7834, lng: -75.3945 },
+  { zip: "19014", lat: 39.8134, lng: -75.3278 },
+  { zip: "19038", lat: 40.0234, lng: -75.1456 },
+  { town: "West Grove", lat: 39.8134, lng: -75.7856 },
+  { town: "Kennett Square", lat: 39.8534, lng: -75.7234 },
 ];
 
 const RegionMap = () => (
@@ -74,13 +76,13 @@ const RegionMap = () => (
       <CircleMarker
         key={i}
         center={[z.lat, z.lng]}
-        radius={z.count > 1 ? 7 : 5}
-        fillColor={C.sand}
-        fillOpacity={0.4}
-        color={C.silver}
-        weight={1}
+        radius={6}
+        fillColor={C.green}
+        fillOpacity={0.7}
+        color="#fff"
+        weight={1.5}
       >
-        <Tooltip direction="top" offset={[0, -6]}>Zip {z.zip} ({z.count} member{z.count > 1 ? 's' : ''})</Tooltip>
+        <Tooltip direction="top" offset={[0, -6]}>{z.town || `Zip ${z.zip}`}</Tooltip>
       </CircleMarker>
     ))}
     {mapCourses.map((c, i) => (
@@ -392,7 +394,7 @@ export default function App() {
           <RegionMap />
         </div>
         <p style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver, marginTop: "10px", textAlign: "center", opacity: 0.7 }}>
-          Beige markers show where our crew is
+          Green markers show where our crew is
         </p>
       </Section>
 
