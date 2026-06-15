@@ -275,7 +275,7 @@ export default function App() {
               color: C.orange, background: `${C.orange}12`,
               padding: "6px 12px", borderRadius: "4px", marginBottom: "20px",
             }}>
-              Est. 2021 · No Laying Up Roost · Philly / DE
+              Est. 2021 · No Laying Up Roost · Philadelphia / Delaware Golf League
             </div>
             <h1 style={{
               fontFamily: "'Outfit'", fontSize: "clamp(40px, 5vw, 64px)", fontWeight: 800,
@@ -289,7 +289,7 @@ export default function App() {
               fontFamily: "'DM Sans'", fontSize: "17px", lineHeight: 1.7,
               color: C.silver, margin: "0 0 28px", maxWidth: "480px",
             }}>
-              335 avid golfers across the Greater Philadelphia region. Structured events, post-round hangs, and the kind of competition that makes Saturday tee times worth protecting.
+              335+ avid golfers across Philadelphia, Delaware, and South Jersey. Structured golf tournaments, post-round hangs, and the kind of competition that makes Saturday tee times worth protecting.
             </p>
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
               <a href="#events" style={{ textDecoration: "none" }}>
@@ -384,9 +384,9 @@ export default function App() {
       {/* REGION MAP */}
       <Section>
         <SectionLabel>Our Region</SectionLabel>
-        <H2>Greater Philly, Delaware & South Jersey.</H2>
+        <H2>Philadelphia Golf League covering Greater Philly, Delaware & South Jersey.</H2>
         <Body>
-          We're based in the Greater Philadelphia area and draw members from across Delaware and southern New Jersey. If you can make the drive and stay for a beer, you're in range.
+          The Electric Phactory is based in the Greater Philadelphia area and draws members from across Delaware and southern New Jersey. Whether you're in Philadelphia, Wilmington, or South Jersey, if you can make the drive and stay for a beer, you're in range for our golf tournaments and events.
         </Body>
         <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: `0 2px 12px ${C.green}18` }}>
           <RegionMap />
@@ -554,12 +554,12 @@ export default function App() {
           <div style={{
             fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 500,
             color: C.orange, letterSpacing: "0.06em", marginBottom: "16px",
-          }}>EST. 2021 · PHILADELPHIA · A NO LAYING UP ROOST</div>
+          }}>EST. 2021 · PHILADELPHIA, PA · DELAWARE · SOUTH JERSEY · A NO LAYING UP ROOST</div>
           <p style={{
             fontFamily: "'DM Sans'", fontSize: "13px", lineHeight: 1.7,
             color: `${C.cream}50`, margin: "0 0 20px", maxWidth: "400px",
           }}>
-            Inaugural Roost Club Champions. Three-time Northeast Regional winners. 335 members and counting. There's something beautiful about meaningless — but structured — competition between peers.
+            Inaugural Roost Club Champions. Three-time Northeast Regional winners. 335+ members across Philadelphia, Delaware, and South Jersey. Structured golf tournaments and community events. There's something beautiful about meaningless — but structured — competition between peers.
           </p>
           <div style={{ display: "flex", gap: "24px", marginBottom: "20px", flexWrap: "wrap" }}>
             {[["Schedule", "#events"], ["Join", "#join"]].map(([label, href]) => (
