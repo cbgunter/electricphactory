@@ -81,9 +81,7 @@ const RegionMap = () => (
         fillOpacity={0.7}
         color="#fff"
         weight={1.5}
-      >
-        <Tooltip direction="top" offset={[0, -6]}>{z.town || `Zip ${z.zip}`}</Tooltip>
-      </CircleMarker>
+      />
     ))}
     {mapCourses.map((c, i) => (
       <CircleMarker
