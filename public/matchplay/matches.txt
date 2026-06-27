@@ -62,6 +62,10 @@ WOODERHAZARD|Colm Parrish|Jake Borer|Colm Parrish|5
 
 # QUARTERFINALS (order matters — QF1 through QF4)
 QUARTER|Andy Flexon|Brendan Hoover|Brendan Hoover|0
-QUARTER|Mike Revak|Craig Boge|TBD|0
-QUARTER|Ben Chambers|Colm Parrish|TBD|0
+QUARTER|Mike Revak|Craig Boge|Mike Revak|1
+QUARTER|Ben Chambers|Colm Parrish|Ben Chambers|3
 QUARTER|Matt Tyblewski|Riley Krupen|Riley Krupen|0
+
+# SEMIFINALS (order matters — SF1 and SF2)
+SEMI|Brendan Hoover|Ben Chambers|TBD|0
+SEMI|Mike Revak|Riley Krupen|TBD|0
