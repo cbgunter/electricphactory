@@ -3,14 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
     <meta name="description" content="Electric Phactory — Philadelphia golf league and community. 335+ members across Greater Philadelphia, Delaware, and South Jersey. Structured events, match play, and Roost Major tournaments." />
     <meta name="keywords" content="Philadelphia golf league, Philly golf community, Delaware golf, New Jersey golf, golf leagues near me, golf tournaments Philadelphia, Roost, golf club" />
     <meta name="author" content="Electric Phactory" />
     <meta property="og:title" content="Electric Phactory — Philadelphia Golf League" />
     <meta property="og:description" content="Meaningless competition. Meaningful people. Join 335+ golfers across Greater Philadelphia." />
-    <meta property="og:image" content="/logo.png" />
+    <meta property="og:image" content="https://electricphactory.golf/logo.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://electricphactory.golf" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Electric Phactory — Philadelphia Golf League" />
+    <meta name="twitter:description" content="Meaningless competition. Meaningful people. Join 335+ golfers across Greater Philadelphia." />
+    <meta name="twitter:image" content="https://electricphactory.golf/logo.png" />
     <link rel="canonical" href="https://electricphactory.golf" />
     <link rel="icon" type="image/png" href="/logo.png" />
     <title>Electric Phactory — Philadelphia Golf League & Community</title>
@@ -19,27 +26,23 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "SportsClub",
       "name": "Electric Phactory",
       "url": "https://electricphactory.golf",
       "logo": "https://electricphactory.golf/logo.png",
       "description": "A golf league and community of 335+ members across Greater Philadelphia, Delaware, and South Jersey",
       "foundingDate": "2021",
+      "sport": "Golf",
       "areaServed": [
-        {
-          "@type": "City",
-          "name": "Philadelphia",
-          "addressRegion": "PA"
-        },
-        {
-          "@type": "State",
-          "name": "Delaware"
-        },
-        {
-          "@type": "Region",
-          "name": "South Jersey"
-        }
+        { "@type": "City", "name": "Philadelphia", "addressRegion": "PA" },
+        { "@type": "State", "name": "Delaware" },
+        { "@type": "Region", "name": "South Jersey" }
       ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "membership",
+        "url": "https://electricphactory.golf/#join"
+      },
       "sameAs": [
         "https://nolayingup.com"
       ]
@@ -49,14 +52,52 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SportsActivity",
-      "name": "Electric Phactory Golf League",
-      "url": "https://electricphactory.golf",
-      "description": "Competitive golf league with tournaments, match play, and community events across Philadelphia, Delaware, and South Jersey",
-      "areaServed": ["Philadelphia, PA", "Delaware", "South Jersey, NJ"],
-      "sport": "Golf"
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do I join a golf league in Philadelphia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Join the Electric Phactory by posting on the NLU Refuge Philly/DE Roll Call thread or finding us on Unknown Golf. Show up to any event — there are no dues, just $5 entry per event."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What areas of Philadelphia does the Electric Phactory cover?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We draw members from across Greater Philadelphia, Delaware, and South Jersey. Our courses run from Wyncote and Paxon Hollow in the western suburbs to Makefield in Bucks County and Town & Country in Delaware."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to be a good golfer to join?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. We use net scoring with GHIN handicaps, so all skill levels compete on a level playing field. Over 60% of our members joined specifically to meet new golfers, not to win."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does it cost to join a Philadelphia golf group?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "There are no annual dues or membership fees. Entry is $5 per event through Unknown Golf, and 50% of every entry fee is donated to Philabundance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What kind of golf events does the Electric Phactory run?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We run 8 scored events per season across the best public and semi-private courses in the greater Philly area — team scrambles, alternate shot, best ball, and individual quota formats. Every event includes a post-round hang."
+          }
+        }
+      ]
     }
     </script>
+
   </head>
   <body>
     <div id="root"></div>

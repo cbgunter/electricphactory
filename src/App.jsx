@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
-import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+
+const RegionMap = lazy(() => import("./RegionMap.jsx"));
 
 const API = "https://iaatvn44bj.execute-api.us-east-1.amazonaws.com";
 
@@ -31,87 +31,6 @@ const specialEvents = [
   { date: "FALL", name: "EP Ryder Cup", sub: "Foursomes, four-ball, and singles over a full weekend" },
 ];
 
-const mapCourses = [
-  { name: "Wyncote Golf Club", lat: 39.804, lng: -75.978 },
-  { name: "Jeffersonville Golf Club", lat: 40.138, lng: -75.432 },
-  { name: "Glen Mills Golf Course", lat: 39.893, lng: -75.497 },
-  { name: "Broad Run Golfers Club", lat: 39.960, lng: -75.665 },
-  { name: "Paxon Hollow CC", lat: 39.918, lng: -75.397 },
-  { name: "Town & Country Golf Links", lat: 39.653, lng: -75.332 },
-  { name: "Rock Manor Golf Club", lat: 39.756, lng: -75.573 },
-  { name: "Makefield Highlands", lat: 40.228, lng: -74.887 },
-];
-
-// Survey member locations (PA only, excluding NJ & out-of-area)
-const memberZips = [
-  { zip: "19147", lat: 39.9526, lng: -75.1652 },
-  { zip: "19711", lat: 39.8235, lng: -75.5847 },
-  { zip: "19380", lat: 39.8900, lng: -75.3289 },
-  { zip: "19072", lat: 39.8812, lng: -75.4950 },
-  { zip: "19007", lat: 39.9389, lng: -75.5089 },
-  { zip: "19067", lat: 39.8945, lng: -75.4512 },
-  { zip: "19390", lat: 40.1245, lng: -75.4967 },
-  { zip: "19335", lat: 39.8745, lng: -75.4189 },
-  { zip: "19428", lat: 40.2134, lng: -75.3850 },
-  { zip: "19810", lat: 39.7834, lng: -75.3945 },
-  { zip: "19014", lat: 39.8134, lng: -75.3278 },
-  { zip: "19038", lat: 40.0234, lng: -75.1456 },
-  { town: "West Grove", lat: 39.8134, lng: -75.7856 },
-  { town: "Kennett Square", lat: 39.8534, lng: -75.7234 },
-];
-
-const RegionMap = () => (
-  <MapContainer
-    center={[39.94, -75.43]}
-    zoom={9}
-    scrollWheelZoom={false}
-    zoomControl={true}
-    style={{ height: "400px", width: "100%", borderRadius: "12px" }}
-  >
-    <TileLayer
-      url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-      subdomains="abcd"
-      maxZoom={19}
-    />
-    {memberZips.map((z, i) => (
-      <CircleMarker
-        key={i}
-        center={[z.lat, z.lng]}
-        radius={6}
-        fillColor={C.green}
-        fillOpacity={0.7}
-        color="#fff"
-        weight={1.5}
-      />
-    ))}
-    {mapCourses.map((c, i) => (
-      <CircleMarker
-        key={i}
-        center={[c.lat, c.lng]}
-        radius={8}
-        fillColor={C.orange}
-        fillOpacity={0.85}
-        color="#fff"
-        weight={1.5}
-      >
-        <Tooltip direction="top" offset={[0, -6]}>{c.name}</Tooltip>
-      </CircleMarker>
-    ))}
-    <CircleMarker
-      center={[39.9526, -75.1652]}
-      radius={10}
-      fillColor={C.green}
-      fillOpacity={0.95}
-      color="#fff"
-      weight={2}
-    >
-      <Tooltip permanent direction="right" offset={[8, 0]} opacity={1}>
-        <span style={{ fontFamily: "'Outfit'", fontWeight: 700, fontSize: "13px" }}>Philadelphia</span>
-      </Tooltip>
-    </CircleMarker>
-  </MapContainer>
-);
 
 const Container = ({ children }) => (
   <div style={{ maxWidth: "1100px", margin: "0 auto", width: "100%" }}>
@@ -212,8 +131,6 @@ export default function App() {
 
   return (
     <div style={{ fontFamily: "'Outfit', sans-serif", background: C.cream, color: C.green }}>
-      <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
-
       {/* NAV */}
       <nav style={{
         borderBottom: `1px solid ${C.sand}`,
@@ -269,6 +186,7 @@ export default function App() {
         )}
       </nav>
 
+      <main>
       {/* HERO */}
       <Section>
         <div className="ep-hero-grid">
@@ -394,7 +312,9 @@ export default function App() {
           The Electric Phactory is based in the Greater Philadelphia area and draws members from across Delaware and southern New Jersey. Whether you're in Philadelphia, Wilmington, or South Jersey, if you can make the drive and stay for a beer, you're in range for our golf tournaments and events.
         </Body>
         <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: `0 2px 12px ${C.green}18` }}>
-          <RegionMap />
+          <Suspense fallback={<div style={{ height: "400px", background: C.sand, borderRadius: "12px" }} />}>
+            <RegionMap />
+          </Suspense>
         </div>
         <p style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver, marginTop: "10px", textAlign: "center", opacity: 0.7 }}>
           Green markers show where our crew is
@@ -656,8 +576,54 @@ export default function App() {
         )}
       </Section>
 
+      {/* FAQ */}
+      <Section bg={C.sand} id="faq">
+        <SectionLabel>Common Questions</SectionLabel>
+        <H2>Frequently asked about the EP.</H2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+          {[
+            {
+              q: "How do I join a golf league in Philadelphia?",
+              a: "Join the Electric Phactory by posting on the NLU Refuge Philly/DE Roll Call thread or finding us on Unknown Golf. Show up to any event — there are no dues, just $5 entry per event.",
+            },
+            {
+              q: "What areas of Philadelphia does the Electric Phactory cover?",
+              a: "We draw members from across Greater Philadelphia, Delaware, and South Jersey. Our courses run from Wyncote and Paxon Hollow in the western suburbs to Makefield in Bucks County and Town & Country in Delaware. If you can make the drive, you're in range.",
+            },
+            {
+              q: "Do I need to be a good golfer to join?",
+              a: "No. We use net scoring with GHIN handicaps, so all skill levels compete on a level playing field. Over 60% of our members joined specifically to meet new golfers — not to win.",
+            },
+            {
+              q: "How much does it cost to join a Philadelphia golf group?",
+              a: "There are no annual dues or membership fees. Entry is $5 per event through Unknown Golf, and 50% of every entry fee is donated to Philabundance.",
+            },
+            {
+              q: "What kind of golf events and tournaments does the Electric Phactory run?",
+              a: "We run 8 scored events per season across the best public and semi-private courses in the greater Philly area — team scrambles, alternate shot, best ball, and individual quota formats. Every event includes a post-round hang: watch parties, brewery visits, or dinner at the course.",
+            },
+          ].map((item, i, arr) => (
+            <div key={i} style={{
+              borderBottom: i < arr.length - 1 ? `1px solid ${C.cream}` : "none",
+              padding: "20px 0",
+            }}>
+              <div style={{
+                fontFamily: "'Outfit'", fontSize: "16px", fontWeight: 700,
+                color: C.green, marginBottom: "8px",
+              }}>{item.q}</div>
+              <div style={{
+                fontFamily: "'DM Sans'", fontSize: "15px", lineHeight: 1.7,
+                color: C.silver,
+              }}>{item.a}</div>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      </main>
+
       {/* FOOTER */}
-      <div style={{ background: C.deep, padding: "40px 32px 28px" }}>
+      <footer style={{ background: C.deep, padding: "40px 32px 28px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
             <img src="/logo.png" alt="" style={{ width: "26px", height: "26px", objectFit: "contain", opacity: 0.8 }} />
@@ -694,7 +660,7 @@ export default function App() {
             </span>
           </div>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }

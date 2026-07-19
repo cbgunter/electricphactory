@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /survey/
+
+Sitemap: https://electricphactory.golf/sitemap.xml
