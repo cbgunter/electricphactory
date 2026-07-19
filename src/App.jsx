@@ -227,8 +227,8 @@ export default function App() {
             </span>
           </div>
           <div className="ep-nav-links">
-            {["Events", "About", "Join"].map((n) => (
-              <a key={n} href={`#${n.toLowerCase()}`} style={{
+            {[["Schedule", "schedule"], ["About", "about"], ["Join", "join"]].map(([n, id]) => (
+              <a key={n} href={`#${id}`} style={{
                 fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver,
                 textDecoration: "none", fontWeight: 500,
               }}>{n}</a>
@@ -250,7 +250,7 @@ export default function App() {
             display: "flex", flexDirection: "column", gap: "18px",
             background: `${C.cream}f8`,
           }}>
-            {[["Events", "#events"], ["About", "#about"], ["Join", "#join"]].map(([label, href]) => (
+            {[["Schedule", "#schedule"], ["About", "#about"], ["Join", "#join"]].map(([label, href]) => (
               <a key={label} href={href} onClick={() => setMenuOpen(false)} style={{
                 fontFamily: "'DM Sans'", fontSize: "16px", color: C.silver,
                 textDecoration: "none", fontWeight: 500,
@@ -275,24 +275,24 @@ export default function App() {
               color: C.orange, background: `${C.orange}12`,
               padding: "6px 12px", borderRadius: "4px", marginBottom: "20px",
             }}>
-              Est. 2021 · No Laying Up Roost · Philadelphia / Delaware Golf League
+              Philadelphia Golf Group · Est. 2021
             </div>
             <h1 style={{
               fontFamily: "'Outfit'", fontSize: "clamp(40px, 5vw, 64px)", fontWeight: 800,
               lineHeight: 1.02, letterSpacing: "-0.04em",
               margin: "0 0 20px", color: C.green,
             }}>
-              Meaningless<br />competition.<br />
-              <span style={{ color: C.orange }}>Meaningful people.</span>
+              Golf is better<br />with your people.<br />
+              <span style={{ color: C.orange }}>Find yours here.</span>
             </h1>
             <p style={{
               fontFamily: "'DM Sans'", fontSize: "17px", lineHeight: 1.7,
               color: C.silver, margin: "0 0 28px", maxWidth: "480px",
             }}>
-              335+ avid golfers across Philadelphia, Delaware, and South Jersey. Structured golf tournaments, post-round hangs, and the kind of competition that makes Saturday tee times worth protecting.
+              335+ golfers across Philadelphia, Delaware, and South Jersey. Rounds, post-round hangs, and a group that makes Saturday tee times worth protecting.
             </p>
             <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <a href="#events" style={{ textDecoration: "none" }}>
+              <a href="#schedule" style={{ textDecoration: "none" }}>
                 <button style={{
                   fontFamily: "'Outfit'", fontWeight: 700, fontSize: "14px",
                   background: C.orange, color: "#fff",
@@ -351,21 +351,21 @@ export default function App() {
           {/* Left: text */}
           <div>
             <SectionLabel>About the EP</SectionLabel>
-            <H2>Golf is better with your people.</H2>
+            <H2>A Philadelphia golf group that actually shows up.</H2>
             <Body>
-              The Electric Phactory is a No Laying Up Roost based in the greater Philadelphia and Delaware region. We were founded in 2021 and won the inaugural Roost Club Championship in 2022. We're three-time Northeast Regional winners and the home of "The Race to the Steeplechase" — our season-long points competition.
+              The Electric Phactory started in 2021 as a crew of Philly-area golfers who wanted something more than just random tee times — a real group with real events and real people to grab a beer with after. We've grown to 335+ members across Philadelphia, Delaware, and South Jersey.
             </Body>
             <Body>
-              We run 8 scored events per season plus match play, a Ryder Cup, and our annual Roost Major. Every event has a planned post-round hang — because sometimes that's the best part. 50% of every $5 entry goes to Philabundance. The other 50% goes to the winners.
+              We run 8 scored events per season across courses from Wyncote to Makefield to Town &amp; Country. Every event has a defined post-round plan — watch parties, brewery visits, dinner at the course. No dues. $5 per event, and half of that goes to Philabundance.
             </Body>
           </div>
           {/* Right: feature grid */}
           <div className="ep-feature-grid">
             {[
-              { icon: "⚡", title: "Structured Competition", desc: "Net quota, Pick-a-Pro, match play, scrambles — real formats with real points on the line." },
+              { icon: "🏌️", title: "Great Courses", desc: "8 events per season across the best public and semi-private courses in the greater Philly area." },
               { icon: "🍺", title: "Post-Round Hangs", desc: "Watch parties, brewery outings, and always a plan for after. The hang is the product." },
               { icon: "🤝", title: "All Skill Levels", desc: "Net scoring levels the playing field. 60% join to meet new golfers. No gatekeeping." },
-              { icon: "🏆", title: "Stakes That Matter", desc: "Race to the Steeplechase points → Regional Team → Roost Club Championship at Sweetens Cove." },
+              { icon: "📍", title: "Rooted in Philly", desc: "Members from across Philadelphia, Delaware, and South Jersey. If you can make the drive, you're in range." },
             ].map((item, i) => (
               <div key={i} style={{ background: C.cream, borderRadius: "12px", padding: "18px" }}>
                 <div style={{ fontSize: "22px", marginBottom: "8px" }}>{item.icon}</div>
@@ -397,8 +397,8 @@ export default function App() {
       </Section>
 
       {/* EVENTS */}
-      <Section bg={C.sand} id="events">
-        <SectionLabel>2026 Season — The Race to the Steeplechase</SectionLabel>
+      <Section bg={C.sand} id="schedule">
+        <SectionLabel>2026 Schedule</SectionLabel>
         <H2>8 events. Every one has a hang.</H2>
         <Body>
           We trimmed from 12 to 8 events to keep energy high all season. Every event has a defined post-round plan — watch parties, brewery visits, or dinner at the course.
@@ -434,48 +434,19 @@ export default function App() {
         </div>
       </Section>
 
-      {/* SPECIAL EVENTS */}
-      <Section>
-        <SectionLabel>Beyond the Season</SectionLabel>
-        <H2>The big ones.</H2>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {specialEvents.map((e, i) => (
-            <div key={i} style={{
-              background: C.sand, borderRadius: "12px", padding: "20px",
-              display: "flex", gap: "16px", alignItems: "flex-start",
-              borderLeft: i === 0 ? `3px solid ${C.orange}` : `3px solid ${C.green}25`,
-            }}>
-              <div style={{
-                fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 700,
-                color: i === 0 ? C.orange : C.green,
-                minWidth: "64px", paddingTop: "2px", flexShrink: 0,
-              }}>{e.date}</div>
-              <div>
-                <div style={{ fontFamily: "'Outfit'", fontSize: "16px", fontWeight: 700, color: C.green, marginBottom: "4px" }}>
-                  {e.name}
-                </div>
-                <div style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver, lineHeight: 1.6 }}>
-                  {e.sub}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* HOW IT WORKS */}
+      {/* THE COMPETITIVE SIDE / NLU */}
       <Section bg={C.green}>
-        <SectionLabel>How It Works</SectionLabel>
-        <H2 light>Race to the Steeplechase.</H2>
+        <SectionLabel>The Competitive Side</SectionLabel>
+        <H2 light>A No Laying Up Roost since 2021.</H2>
         <Body light>
-          Every event earns you points toward the season-long Race. More players in the field means more points available — events crossing 25 players become "Signature Events" with a boosted points table. The points leader earns a spot on the Regional Team.
+          The EP is part of the No Laying Up Roost network — a national community of golf groups. We won the inaugural Roost Club Championship in 2022 and are three-time Northeast Regional winners. Our season-long points race, match play bracket, and marquee events give members something to chase all year.
         </Body>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "8px", marginBottom: "24px" }}>
           {[
             { path: "Season Points Leader", reward: "Regional Team spot" },
             { path: "Match Play Champion", reward: "Regional Team spot" },
-            { path: "Top performers at Steeplechase", reward: "Final 2 Regional Team spots" },
+            { path: "Top performers at The Steeplechase", reward: "Final 2 Regional Team spots" },
             { path: "Regional Team wins", reward: "Roost Club Championship at Sweetens Cove" },
           ].map((p, i) => (
             <div key={i} className="ep-path-row" style={{ background: `${C.cream}08` }}>
@@ -489,31 +460,35 @@ export default function App() {
           ))}
         </div>
 
-        <div style={{ marginTop: "28px", padding: "20px", background: `${C.cream}10`, borderRadius: "10px" }}>
-          <div style={{
-            fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
-            color: C.orange, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px",
-          }}>Match Play</div>
-          <p style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: `${C.cream}80`, margin: 0, lineHeight: 1.65 }}>
-            32-player bracket. Four geographic groups, five matches each in group play. Top 2 from each group advance to single-elimination playoffs. The champion earns a Regional Team spot.
-          </p>
-        </div>
-      </Section>
-
-      {/* MERCH */}
-      <Section>
-        <SectionLabel>The Gear</SectionLabel>
-        <H2>Rep the Phactory.</H2>
-        <Body>
-          We partnered with Holderness & Bourne for our first run of EP-branded merchandise. More drops coming from their Spring 2026 collection. Stay tuned on Unknown Golf.
-        </Body>
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          {["Holderness & Bourne Collab", "EP Ball Markers", "Rope Hats — Coming Soon"].map((item, i) => (
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          {specialEvents.map((e, i) => (
             <div key={i} style={{
-              background: C.sand, borderRadius: "10px", padding: "14px 20px",
-              fontFamily: "'Outfit'", fontSize: "14px", fontWeight: 600, color: C.green,
-            }}>{item}</div>
+              background: `${C.cream}08`, borderRadius: "12px", padding: "18px 20px",
+              display: "flex", gap: "16px", alignItems: "flex-start",
+              borderLeft: i === 0 ? `3px solid ${C.orange}` : `3px solid ${C.cream}20`,
+            }}>
+              <div style={{
+                fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 700,
+                color: i === 0 ? C.orange : `${C.cream}60`,
+                minWidth: "64px", paddingTop: "2px", flexShrink: 0,
+              }}>{e.date}</div>
+              <div>
+                <div style={{ fontFamily: "'Outfit'", fontSize: "15px", fontWeight: 700, color: C.cream, marginBottom: "4px" }}>
+                  {e.name}
+                </div>
+                <div style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: `${C.cream}70`, lineHeight: 1.6 }}>
+                  {e.sub}
+                </div>
+              </div>
+            </div>
           ))}
+        </div>
+
+        <div style={{ marginTop: "20px" }}>
+          <Link to="/matchplay" style={{
+            fontFamily: "'Outfit'", fontWeight: 600, fontSize: "14px",
+            color: C.orange, textDecoration: "none",
+          }}>View Match Play bracket →</Link>
         </div>
       </Section>
 
@@ -554,15 +529,15 @@ export default function App() {
           <div style={{
             fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 500,
             color: C.orange, letterSpacing: "0.06em", marginBottom: "16px",
-          }}>EST. 2021 · PHILADELPHIA, PA · DELAWARE · SOUTH JERSEY · A NO LAYING UP ROOST</div>
+          }}>EST. 2021 · PHILADELPHIA, PA · DELAWARE · SOUTH JERSEY</div>
           <p style={{
             fontFamily: "'DM Sans'", fontSize: "13px", lineHeight: 1.7,
             color: `${C.cream}50`, margin: "0 0 20px", maxWidth: "400px",
           }}>
-            Inaugural Roost Club Champions. Three-time Northeast Regional winners. 335+ members across Philadelphia, Delaware, and South Jersey. Structured golf tournaments and community events. There's something beautiful about meaningless — but structured — competition between peers.
+            A Philadelphia golf group built on great courses, great people, and great post-round hangs. 335+ members across Philadelphia, Delaware, and South Jersey. Part of the No Laying Up Roost network — inaugural Roost Club Champions and three-time Northeast Regional winners.
           </p>
           <div style={{ display: "flex", gap: "24px", marginBottom: "20px", flexWrap: "wrap" }}>
-            {[["Schedule", "#events"], ["Join", "#join"]].map(([label, href]) => (
+            {[["Schedule", "#schedule"], ["Join", "#join"]].map(([label, href]) => (
               <a key={label} href={href} style={{
                 fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600,
                 color: C.orange, textDecoration: "none",
