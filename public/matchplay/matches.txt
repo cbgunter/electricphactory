@@ -67,5 +67,8 @@ QUARTER|Ben Chambers|Colm Parrish|Ben Chambers|3
 QUARTER|Matt Tyblewski|Riley Krupen|Riley Krupen|0
 
 # SEMIFINALS (order matters — SF1 and SF2)
-SEMI|Brendan Hoover|Ben Chambers|TBD|0
-SEMI|Mike Revak|Riley Krupen|TBD|0
+SEMI|Brendan Hoover|Ben Chambers|Brendan Hoover|0
+SEMI|Mike Revak|Riley Krupen|Riley Krupen|0
+
+# FINAL
+FINAL|Brendan Hoover|Riley Krupen|Riley Krupen|0

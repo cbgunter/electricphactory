@@ -102,12 +102,12 @@ function generateBracket(allStandings, matches) {
     final: resolveMatch(finalMatches, 0, "TBD", "TBD"),
   };
 
-  if (bracket.quarters[0].winner && bracket.quarters[1].winner) {
+  if (bracket.quarters[0].winner && bracket.quarters[2].winner) {
     bracket.semis[0].player1 = bracket.quarters[0].winner;
-    bracket.semis[0].player2 = bracket.quarters[1].winner;
+    bracket.semis[0].player2 = bracket.quarters[2].winner;
   }
-  if (bracket.quarters[2].winner && bracket.quarters[3].winner) {
-    bracket.semis[1].player1 = bracket.quarters[2].winner;
+  if (bracket.quarters[1].winner && bracket.quarters[3].winner) {
+    bracket.semis[1].player1 = bracket.quarters[1].winner;
     bracket.semis[1].player2 = bracket.quarters[3].winner;
   }
   if (bracket.semis[0].winner && bracket.semis[1].winner) {
@@ -170,7 +170,7 @@ function BracketMatchCard({ match, label, isFinal }) {
                 </span>
                 {isWinner && (
                   <span style={{ fontFamily: "'DM Sans'", fontSize: "11px", color: C.orange, marginLeft: "8px", whiteSpace: "nowrap" }}>
-                    {match.differential > 0 ? `${match.differential} up` : "W"}
+                    W
                   </span>
                 )}
               </div>
@@ -185,7 +185,7 @@ function BracketMatchCard({ match, label, isFinal }) {
           fontFamily: "'DM Sans'", fontSize: "11px",
           color: isFinal ? `${C.cream}60` : C.silver,
         }}>
-          {match.isTie ? "Halved" : `${displayName(match.winner)} wins${match.differential > 0 ? ` ${match.differential} up` : ""}`}
+          {match.isTie ? "Halved" : `${displayName(match.winner)} wins`}
         </div>
       )}
     </div>
@@ -228,7 +228,7 @@ function GroupCard({ groupKey, standings, matches }) {
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr style={{ background: `${C.deep}08` }}>
-            {["#", "Player", "P", "W", "T", "L", "Pts", "Diff"].map((h, i) => (
+            {["#", "Player", "P", "W", "T", "L", "Diff"].map((h, i) => (
               <th key={h} style={{
                 fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 700,
                 color: C.silver, letterSpacing: "0.06em",
@@ -257,7 +257,7 @@ function GroupCard({ groupKey, standings, matches }) {
                   {isQ && <span style={{ marginLeft: "6px", fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 700, color: C.orange, background: `${C.orange}18`, padding: "1px 5px", borderRadius: "3px" }}>Q</span>}
                   {isE && <span style={{ marginLeft: "6px", fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 700, color: C.silver, background: `${C.silver}18`, padding: "1px 5px", borderRadius: "3px" }}>E</span>}
                 </td>
-                {[s.played, s.won, s.tied, s.lost, s.points].map((v, ci) => (
+                {[s.played, s.won, s.tied, s.lost].map((v, ci) => (
                   <td key={ci} style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.silver, padding: "8px 10px", textAlign: "center" }}>{v}</td>
                 ))}
                 <td style={{
