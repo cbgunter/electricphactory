@@ -1,7 +1,13 @@
-import { useState, useRef, lazy, Suspense } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const RegionMap = lazy(() => import("./RegionMap.jsx"));
+// useEffect never runs during renderToString, so leaflet (browser-only) never loads server-side
+function RegionMap() {
+  const [Map, setMap] = useState(null);
+  useEffect(() => { import("./RegionMap.jsx").then(m => setMap(() => m.default)); }, []);
+  if (!Map) return <div style={{ height: "400px", borderRadius: "12px" }} />;
+  return <Map />;
+}
 
 const API = "https://iaatvn44bj.execute-api.us-east-1.amazonaws.com";
 
@@ -312,9 +318,7 @@ export default function App() {
           The Electric Phactory is based in the Greater Philadelphia area and draws members from across Delaware and southern New Jersey. Whether you're in Philadelphia, Wilmington, or South Jersey, if you can make the drive and stay for a beer, you're in range for our golf tournaments and events.
         </Body>
         <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: `0 2px 12px ${C.green}18` }}>
-          <Suspense fallback={<div style={{ height: "400px", background: C.sand, borderRadius: "12px" }} />}>
-            <RegionMap />
-          </Suspense>
+          <RegionMap />
         </div>
         <p style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver, marginTop: "10px", textAlign: "center", opacity: 0.7 }}>
           Green markers show where our crew is
