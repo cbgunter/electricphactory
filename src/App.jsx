@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+
+const API = "https://iaatvn44bj.execute-api.us-east-1.amazonaws.com";
 
 const C = {
   cream: "#F5F0E8", green: "#004C54", orange: "#D4691C",
@@ -193,6 +195,9 @@ const EventCard = ({ event }) => (
 export default function App() {
   const [eventsTab, setEventsTab] = useState("all");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [contactForm, setContactForm] = useState({ name: "", email: "", message: "", company: "" });
+  const [contactStatus, setContactStatus] = useState("idle"); // idle | sending | sent | error
+  const contactMountedAt = useRef(Date.now());
 
   const allEvents = [...teamEvents, ...indivEvents].sort((a, b) => {
     const months = { MAR: 3, APR: 4, MAY: 5, JUN: 6, JUL: 7, AUG: 8 };
@@ -227,7 +232,7 @@ export default function App() {
             </span>
           </div>
           <div className="ep-nav-links">
-            {[["Schedule", "schedule"], ["About", "about"], ["Join", "join"]].map(([n, id]) => (
+            {[["Schedule", "schedule"], ["About", "about"], ["Join", "join"], ["Contact", "contact"]].map(([n, id]) => (
               <a key={n} href={`#${id}`} style={{
                 fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver,
                 textDecoration: "none", fontWeight: 500,
@@ -250,7 +255,7 @@ export default function App() {
             display: "flex", flexDirection: "column", gap: "18px",
             background: `${C.cream}f8`,
           }}>
-            {[["Schedule", "#schedule"], ["About", "#about"], ["Join", "#join"]].map(([label, href]) => (
+            {[["Schedule", "#schedule"], ["About", "#about"], ["Join", "#join"], ["Contact", "#contact"]].map(([label, href]) => (
               <a key={label} href={href} onClick={() => setMenuOpen(false)} style={{
                 fontFamily: "'DM Sans'", fontSize: "16px", color: C.silver,
                 textDecoration: "none", fontWeight: 500,
@@ -516,6 +521,141 @@ export default function App() {
         </div>
       </Section>
 
+      {/* CONTACT */}
+      <Section bg={C.cream} id="contact">
+        <SectionLabel>Get in Touch</SectionLabel>
+        <H2>Drop us a line.</H2>
+        <Body>Questions about joining, events, or anything else? We'd love to hear from you.</Body>
+        {contactStatus === "sent" ? (
+          <div style={{
+            background: `${C.green}12`, border: `1.5px solid ${C.green}25`,
+            borderRadius: "12px", padding: "24px 28px",
+            fontFamily: "'DM Sans'", fontSize: "16px", lineHeight: 1.75, color: C.green,
+          }}>
+            Thanks — we'll be in touch.
+          </div>
+        ) : (
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setContactStatus("sending");
+              try {
+                const res = await fetch(`${API}/contact`, {
+                  method: "POST",
+                  headers: { "content-type": "application/json" },
+                  body: JSON.stringify({
+                    ...contactForm,
+                    elapsed: (Date.now() - contactMountedAt.current) / 1000,
+                  }),
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                  setContactStatus("sent");
+                } else {
+                  setContactStatus("error");
+                }
+              } catch {
+                setContactStatus("error");
+              }
+            }}
+            style={{ maxWidth: "520px" }}
+          >
+            {/* Honeypot — hidden from real users */}
+            <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
+              <input
+                type="text"
+                name="company"
+                value={contactForm.company}
+                onChange={(e) => setContactForm(f => ({ ...f, company: e.target.value }))}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600, color: C.green, display: "block", marginBottom: "6px" }}>
+                Name
+              </label>
+              <input
+                type="text"
+                required
+                maxLength={100}
+                value={contactForm.name}
+                onChange={(e) => setContactForm(f => ({ ...f, name: e.target.value }))}
+                placeholder="Your name"
+                style={{
+                  width: "100%", padding: "12px 16px", boxSizing: "border-box",
+                  fontFamily: "'DM Sans'", fontSize: "15px", color: C.green,
+                  background: C.sand, border: `1.5px solid ${C.green}20`,
+                  borderRadius: "8px", outline: "none",
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600, color: C.green, display: "block", marginBottom: "6px" }}>
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                maxLength={200}
+                value={contactForm.email}
+                onChange={(e) => setContactForm(f => ({ ...f, email: e.target.value }))}
+                placeholder="you@example.com"
+                style={{
+                  width: "100%", padding: "12px 16px", boxSizing: "border-box",
+                  fontFamily: "'DM Sans'", fontSize: "15px", color: C.green,
+                  background: C.sand, border: `1.5px solid ${C.green}20`,
+                  borderRadius: "8px", outline: "none",
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "24px" }}>
+              <label style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600, color: C.green, display: "block", marginBottom: "6px" }}>
+                Message
+              </label>
+              <textarea
+                required
+                minLength={10}
+                maxLength={5000}
+                rows={4}
+                value={contactForm.message}
+                onChange={(e) => setContactForm(f => ({ ...f, message: e.target.value }))}
+                placeholder="What's on your mind?"
+                style={{
+                  width: "100%", padding: "12px 16px", boxSizing: "border-box",
+                  fontFamily: "'DM Sans'", fontSize: "15px", color: C.green, lineHeight: 1.6,
+                  background: C.sand, border: `1.5px solid ${C.green}20`,
+                  borderRadius: "8px", outline: "none", resize: "vertical",
+                }}
+              />
+            </div>
+
+            {contactStatus === "error" && (
+              <p style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.orange, margin: "0 0 16px" }}>
+                Something went wrong — please try again.
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={contactStatus === "sending"}
+              style={{
+                fontFamily: "'Outfit'", fontWeight: 700, fontSize: "14px",
+                background: C.orange, color: "#fff",
+                border: "none", borderRadius: "8px", padding: "14px 28px",
+                cursor: contactStatus === "sending" ? "not-allowed" : "pointer",
+                opacity: contactStatus === "sending" ? 0.6 : 1,
+              }}
+            >
+              {contactStatus === "sending" ? "Sending…" : "Send Message"}
+            </button>
+          </form>
+        )}
+      </Section>
+
       {/* FOOTER */}
       <div style={{ background: C.deep, padding: "40px 32px 28px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
@@ -537,7 +677,7 @@ export default function App() {
             A Philadelphia golf group built on great courses, great people, and great post-round hangs. 335+ members across Philadelphia, Delaware, and South Jersey. Part of the No Laying Up Roost network — inaugural Roost Club Champions and three-time Northeast Regional winners.
           </p>
           <div style={{ display: "flex", gap: "24px", marginBottom: "20px", flexWrap: "wrap" }}>
-            {[["Schedule", "#schedule"], ["Join", "#join"]].map(([label, href]) => (
+            {[["Schedule", "#schedule"], ["Join", "#join"], ["Contact", "#contact"]].map(([label, href]) => (
               <a key={label} href={href} style={{
                 fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600,
                 color: C.orange, textDecoration: "none",

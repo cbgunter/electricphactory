@@ -65,4 +65,6 @@ React + Vite SPA with React Router. Two routes:
 
 GitHub Actions requires three repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `CLOUDFRONT_DISTRIBUTION_ID`.
 
-Survey API routes: `POST /submit` (store response), `GET /results?surveyId=X&questionId=Y` (aggregate counts for live chart).
+Survey API routes: `POST /submit` (store response), `GET /results?surveyId=X&questionId=Y` (aggregate counts for live chart), `POST /contact` (send email via SES — honeypot + timing spam protection).
+
+Contact route requires: Lambda env vars `CONTACT_TO` and `CONTACT_FROM` (both `cbgunter@gmail.com`); inline IAM policy `ep-contact-ses-send` granting `ses:SendEmail` on `ep-survey-lambda-role`; SES identity verification for the email address in us-east-1 (already done).

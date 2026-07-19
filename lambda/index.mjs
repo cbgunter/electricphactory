@@ -1,9 +1,14 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, PutCommand, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { randomUUID } from "crypto";
 
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({ region: "us-east-1" }));
+const ses = new SESClient({ region: "us-east-1" });
 const TABLE = "ep-surveys";
+
+const CONTACT_TO = process.env.CONTACT_TO;
+const CONTACT_FROM = process.env.CONTACT_FROM;
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -16,6 +21,9 @@ const respond = (status, body) => ({
   headers: cors,
   body: JSON.stringify(body),
 });
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const stripNewlines = (s) => String(s ?? "").replace(/[\r\n]/g, " ").trim();
 
 export const handler = async (event) => {
   const method = event.requestContext?.http?.method ?? event.httpMethod;
@@ -41,6 +49,48 @@ export const handler = async (event) => {
         submittedAt: new Date().toISOString(),
       },
     }));
+    return respond(200, { success: true });
+  }
+
+  // POST /contact
+  if (method === "POST" && path === "/contact") {
+    let body;
+    try { body = JSON.parse(event.body || "{}"); }
+    catch { return respond(400, { error: "Invalid JSON" }); }
+
+    const { name, email, message, company, elapsed } = body;
+
+    // Spam checks — silent 200 so bots get no signal
+    if (company) return respond(200, { success: true });
+    if (!elapsed || Number(elapsed) < 3) return respond(200, { success: true });
+
+    // Validation
+    const trimName = stripNewlines(name);
+    const trimEmail = stripNewlines(email);
+    const trimMsg = (message ?? "").trim();
+
+    if (!trimName || trimName.length > 100)
+      return respond(400, { error: "Name is required (max 100 chars)" });
+    if (!trimEmail || !EMAIL_RE.test(trimEmail) || trimEmail.length > 200)
+      return respond(400, { error: "Valid email is required" });
+    if (!trimMsg || trimMsg.length < 10 || trimMsg.length > 5000)
+      return respond(400, { error: "Message must be 10–5000 characters" });
+
+    await ses.send(new SendEmailCommand({
+      Source: CONTACT_FROM,
+      Destination: { ToAddresses: [CONTACT_TO] },
+      ReplyToAddresses: [trimEmail],
+      Message: {
+        Subject: { Data: `EP Contact — ${trimName}`, Charset: "UTF-8" },
+        Body: {
+          Text: {
+            Data: `Name: ${trimName}\nEmail: ${trimEmail}\n\n${trimMsg}`,
+            Charset: "UTF-8",
+          },
+        },
+      },
+    }));
+
     return respond(200, { success: true });
   }
 
