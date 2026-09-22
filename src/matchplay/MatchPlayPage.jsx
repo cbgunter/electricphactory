@@ -1,131 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import { API, REGIONS, MIN_MATCHES, calculateAllStandings, generateBracket, fmtDiff, displayName } from "./data.js";
 
 const C = {
   cream: "#F5F0E8", green: "#004C54", orange: "#D4691C",
   sand: "#EDE6DA", silver: "#5C5955", deep: "#002B30",
 };
-
-// ── Data ────────────────────────────────────────────────────────────────────
-
-const GROUPS = {
-  THEJAWNS: {
-    name: "The Jawns",
-    players: ["Andy Flexon","Craig Boge","Athanasi Kourkoulis","Evan Cannon","Eamon Mccarren","Alan Miteer","Michael Schiliro","Matthew Romond"],
-  },
-  YOUSEGUNNAS: {
-    name: "Youse Gunnas",
-    players: ["Mike Revak","Ryan Fogelsong","Corey Gunter","Vishal Kadamandla","Ryan DeAscanis","Brendan Hoover","Bob Taylor","Andrew Crowe"],
-  },
-  DOWNASHORE: {
-    name: "Down a Shore",
-    players: ["Ben Chambers","Riley Krupen","Wesley Davis","William James","Kevin Reynolds","Adam Yoder","Jason Bullock","Jeff Grace"],
-  },
-  WOODERHAZARD: {
-    name: "The Wooder Hazards",
-    players: ["Matt Tyblewski","Colm Parrish","Adam Bucci","Kiaran Leary","Justin Gannon","Brian Armour","Jake Borer","Jared Keating"],
-  },
-};
-
-// ── Logic ────────────────────────────────────────────────────────────────────
-
-function parseMatches(text) {
-  return text.split("\n").reduce((acc, line) => {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) return acc;
-    const parts = trimmed.split("|").map(p => p.trim());
-    if (parts.length === 5) {
-      const [group, player1, player2, winner, differential] = parts;
-      acc.push({ group, player1, player2, winner, differential: parseInt(differential, 10) || 0, isTie: winner === "TIE" });
-    }
-    return acc;
-  }, []);
-}
-
-function calculateStandings(groupKey, players, matches) {
-  const standings = players.map(name => ({ name, played: 0, won: 0, tied: 0, lost: 0, points: 0, differential: 0 }));
-  matches.filter(m => m.group === groupKey).forEach(match => {
-    const p1 = standings.find(s => s.name === match.player1);
-    const p2 = standings.find(s => s.name === match.player2);
-    if (!p1 || !p2) return;
-    p1.played++; p2.played++;
-    if (match.isTie) {
-      p1.tied++; p2.tied++; p1.points++; p2.points++;
-    } else {
-      const winner = match.winner === match.player1 ? p1 : p2;
-      const loser = match.winner === match.player1 ? p2 : p1;
-      winner.won++; winner.points += 3; winner.differential += match.differential;
-      loser.lost++; loser.differential -= match.differential;
-    }
-  });
-  standings.sort((a, b) => b.points - a.points || b.differential - a.differential || b.won - a.won);
-  standings.forEach((s, i) => {
-    s.rank = i + 1;
-    const maxPossible = s.points + 3 * Math.max(0, 5 - s.played);
-    s.eliminated = standings.filter(o => o.name !== s.name && o.points > maxPossible).length >= 2;
-  });
-  return standings;
-}
-
-function calculateAllStandings(matches) {
-  return Object.fromEntries(
-    Object.entries(GROUPS).map(([key, g]) => [key, calculateStandings(key, g.players, matches)])
-  );
-}
-
-function generateBracket(allStandings, matches) {
-  const q = key => ({ first: allStandings[key]?.[0]?.name || "TBD", second: allStandings[key]?.[1]?.name || "TBD" });
-  const qualified = { THEJAWNS: q("THEJAWNS"), YOUSEGUNNAS: q("YOUSEGUNNAS"), DOWNASHORE: q("DOWNASHORE"), WOODERHAZARD: q("WOODERHAZARD") };
-
-  const byRound = round => matches.filter(m => m.group === round);
-  const quarterMatches = byRound("QUARTER");
-  const semiMatches = byRound("SEMI");
-  const finalMatches = byRound("FINAL");
-
-  function resolveMatch(arr, idx, defaultP1, defaultP2) {
-    const m = arr[idx];
-    if (m) return { player1: m.player1, player2: m.player2, winner: m.winner === "TBD" ? null : m.winner, differential: m.differential, isTie: m.isTie, completed: !m.isTie && m.winner !== "TBD" };
-    return { player1: defaultP1, player2: defaultP2, winner: null, differential: 0, isTie: false, completed: false };
-  }
-
-  const bracket = {
-    quarters: [
-      resolveMatch(quarterMatches, 0, qualified.THEJAWNS.first, qualified.YOUSEGUNNAS.second),
-      resolveMatch(quarterMatches, 1, qualified.YOUSEGUNNAS.first, qualified.THEJAWNS.second),
-      resolveMatch(quarterMatches, 2, qualified.DOWNASHORE.first, qualified.WOODERHAZARD.second),
-      resolveMatch(quarterMatches, 3, qualified.WOODERHAZARD.first, qualified.DOWNASHORE.second),
-    ],
-    semis: [
-      resolveMatch(semiMatches, 0, "TBD", "TBD"),
-      resolveMatch(semiMatches, 1, "TBD", "TBD"),
-    ],
-    final: resolveMatch(finalMatches, 0, "TBD", "TBD"),
-  };
-
-  if (bracket.quarters[0].winner && bracket.quarters[2].winner) {
-    bracket.semis[0].player1 = bracket.quarters[0].winner;
-    bracket.semis[0].player2 = bracket.quarters[2].winner;
-  }
-  if (bracket.quarters[1].winner && bracket.quarters[3].winner) {
-    bracket.semis[1].player1 = bracket.quarters[1].winner;
-    bracket.semis[1].player2 = bracket.quarters[3].winner;
-  }
-  if (bracket.semis[0].winner && bracket.semis[1].winner) {
-    bracket.final.player1 = bracket.semis[0].winner;
-    bracket.final.player2 = bracket.semis[1].winner;
-  }
-
-  return bracket;
-}
-
-function fmtDiff(d) { return d === 0 ? "0" : d > 0 ? `+${d}` : `${d}`; }
-
-function displayName(name) {
-  if (!name || name === "TBD") return name;
-  const parts = name.trim().split(/\s+/);
-  if (parts.length === 1) return name;
-  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
-}
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -210,19 +90,18 @@ function RoundLabel({ children }) {
   );
 }
 
-function GroupCard({ groupKey, standings, matches }) {
-  const groupData = GROUPS[groupKey];
-  const groupMatches = matches.filter(m => m.group === groupKey);
-  const totalPlayed = standings.reduce((s, p) => s + p.played, 0) / 2;
+function RegionCard({ regionKey, standings, matches }) {
+  const regionData = REGIONS[regionKey];
+  const regionMatches = matches.filter(m => m.group === regionKey);
 
   return (
     <div style={{ background: C.sand, borderRadius: "12px", overflow: "hidden" }}>
       <div style={{ background: C.green, padding: "14px 18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ fontFamily: "'Outfit'", fontSize: "15px", fontWeight: 700, color: C.cream }}>
-          {groupData.name}
+          {regionData.name}
         </div>
         <div style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: `${C.cream}70` }}>
-          {totalPlayed} of 20 matches
+          {regionMatches.length} match{regionMatches.length === 1 ? "" : "es"} played
         </div>
       </div>
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
@@ -241,12 +120,10 @@ function GroupCard({ groupKey, standings, matches }) {
         </thead>
         <tbody>
           {standings.map((s, i) => {
-            const isQ = i < 2;
-            const isE = !isQ && s.eliminated;
+            const isQ = i < 4;
             return (
               <tr key={s.name} style={{
                 background: isQ ? `${C.orange}10` : "transparent",
-                opacity: isE ? 0.45 : 1,
                 borderBottom: `1px solid ${C.cream}60`,
               }}>
                 <td style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 600, color: isQ ? C.orange : C.silver, padding: "8px 10px", textAlign: "center" }}>
@@ -255,14 +132,18 @@ function GroupCard({ groupKey, standings, matches }) {
                 <td style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: isQ ? 700 : 500, color: C.green, padding: "8px 12px 8px 8px" }}>
                   {displayName(s.name)}
                   {isQ && <span style={{ marginLeft: "6px", fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 700, color: C.orange, background: `${C.orange}18`, padding: "1px 5px", borderRadius: "3px" }}>Q</span>}
-                  {isE && <span style={{ marginLeft: "6px", fontFamily: "'Outfit'", fontSize: "10px", fontWeight: 700, color: C.silver, background: `${C.silver}18`, padding: "1px 5px", borderRadius: "3px" }}>E</span>}
+                  {s.totalPlayed > s.played && (
+                    <span style={{ marginLeft: "6px", fontFamily: "'DM Sans'", fontSize: "10px", color: C.silver }}>
+                      (best {s.played} of {s.totalPlayed})
+                    </span>
+                  )}
                 </td>
                 {[s.played, s.won, s.tied, s.lost].map((v, ci) => (
                   <td key={ci} style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.silver, padding: "8px 10px", textAlign: "center" }}>{v}</td>
                 ))}
                 <td style={{
                   fontFamily: "'DM Sans'", fontSize: "13px", fontWeight: 600,
-                  color: s.differential > 0 ? C.orange : s.differential < 0 ? C.silver : C.silver,
+                  color: s.differential > 0 ? C.orange : C.silver,
                   padding: "8px 10px", textAlign: "center",
                 }}>{fmtDiff(s.differential)}</td>
               </tr>
@@ -271,6 +152,14 @@ function GroupCard({ groupKey, standings, matches }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function RuleItem({ children }) {
+  return (
+    <li style={{ fontFamily: "'DM Sans'", fontSize: "14px", lineHeight: 1.75, color: C.green, marginBottom: "8px" }}>
+      {children}
+    </li>
   );
 }
 
@@ -353,7 +242,7 @@ function Footer() {
         </div>
         <div style={{ borderTop: `1px solid ${C.cream}10`, paddingTop: "14px" }}>
           <span style={{ fontFamily: "'DM Sans'", fontSize: "11px", color: `${C.cream}35` }}>
-            © 2026 Electric Phactory · 50% of entry fees donated to Philabundance
+            © 2026 Electric Phactory · Entry fees split between the champion's prize and a charity of their choosing
           </span>
         </div>
       </div>
@@ -369,9 +258,9 @@ export default function MatchPlayPage() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    fetch("/matchplay/matches.txt")
-      .then(r => r.text())
-      .then(text => { setMatches(parseMatches(text)); setLoading(false); })
+    fetch(`${API}/matchplay/matches`)
+      .then(r => r.json())
+      .then(data => { setMatches(data.matches || []); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
@@ -379,7 +268,7 @@ export default function MatchPlayPage() {
   const bracket = useMemo(() => generateBracket(allStandings, matches), [allStandings, matches]);
 
   const groupPlayComplete = Object.values(allStandings).every(standings =>
-    standings.slice(0, 2).every(p => p.played >= 5)
+    standings.slice(0, 4).every(p => p.totalPlayed >= MIN_MATCHES)
   );
 
   return (
@@ -397,7 +286,7 @@ export default function MatchPlayPage() {
             color: C.orange, background: `${C.orange}18`,
             padding: "6px 12px", borderRadius: "4px", marginBottom: "16px",
           }}>
-            August 2025 – July 2026
+            August 2026 – July 2027
           </div>
           <h1 style={{
             fontFamily: "'Outfit'", fontSize: "clamp(32px, 4vw, 52px)", fontWeight: 800,
@@ -406,8 +295,8 @@ export default function MatchPlayPage() {
           }}>
             EP Match Play
           </h1>
-          <p style={{ fontFamily: "'DM Sans'", fontSize: "16px", lineHeight: 1.7, color: `${C.cream}80`, margin: 0, maxWidth: "560px" }}>
-            32-player bracket. Four geographic groups, five matches each. Top 2 from each group advance to single-elimination playoffs. Matches at 80% handicap.
+          <p style={{ fontFamily: "'DM Sans'", fontSize: "16px", lineHeight: 1.7, color: `${C.cream}80`, margin: 0, maxWidth: "580px" }}>
+            North vs. South. Play 5–10 matches within your region — your best 5 results count. Top 4 from each region advance to a single-elimination bracket. Matches at 80% handicap.
           </p>
           <div style={{ display: "flex", gap: "24px", marginTop: "24px", flexWrap: "wrap" }}>
             {[
@@ -425,8 +314,45 @@ export default function MatchPlayPage() {
         </div>
       </div>
 
+      {/* ── Format & Rules ── */}
+      <div style={{ background: C.cream, padding: "40px 32px 8px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          <div style={{
+            fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
+            letterSpacing: "0.14em", textTransform: "uppercase",
+            color: C.orange, marginBottom: "8px",
+          }}>Quick Reference</div>
+          <h2 style={{
+            fontFamily: "'Outfit'", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800,
+            letterSpacing: "-0.03em", margin: "0 0 18px", color: C.green,
+          }}>
+            Format & Rules
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px" }} className="ep-groups-grid">
+            <div>
+              <div style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 700, color: C.orange, marginBottom: "8px" }}>Group Play</div>
+              <ul style={{ margin: 0, paddingLeft: "18px" }}>
+                <RuleItem>Play 5 matches within your region, never facing the same opponent twice.</RuleItem>
+                <RuleItem>Once you've played 5, you can play up to 5 more (10 max) — your worst results are thrown out.</RuleItem>
+                <RuleItem>Scoring: win = 3 pts, tie = 1 pt, loss = 0 pts.</RuleItem>
+                <RuleItem>Tiebreakers: points → match differential → total matches played.</RuleItem>
+              </ul>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'Outfit'", fontSize: "13px", fontWeight: 700, color: C.orange, marginBottom: "8px" }}>Playing a Match</div>
+              <ul style={{ margin: 0, paddingLeft: "18px" }}>
+                <RuleItem>Matches are played at 80% handicap for a more equitable field.</RuleItem>
+                <RuleItem>Players are responsible for properly assessing strokes using GHIN.</RuleItem>
+                <RuleItem>Either player posts the result in #match-play on Slack in a timely manner.</RuleItem>
+                <RuleItem>Entry is $10 via Venmo — half to a charity of the champion's choosing, half to the champion as a cash prize.</RuleItem>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── Bracket ── */}
-      <div style={{ background: C.cream, padding: "48px 32px" }}>
+      <div style={{ background: C.cream, padding: "40px 32px 48px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{
             fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
@@ -442,7 +368,7 @@ export default function MatchPlayPage() {
           <p style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver, margin: "0 0 28px", lineHeight: 1.6 }}>
             {groupPlayComplete
               ? "Group play complete. Bracket seeded and ready."
-              : "Bracket seeded from group standings. Quarterfinal slots update as group play finishes."}
+              : "Bracket seeded from region standings. Quarterfinal slots update as group play finishes."}
           </p>
 
           {loading ? (
@@ -502,13 +428,13 @@ export default function MatchPlayPage() {
           {/* Tiebreaker note */}
           <div style={{ marginTop: "20px", padding: "14px 18px", background: `${C.green}08`, borderRadius: "10px", borderLeft: `3px solid ${C.green}30` }}>
             <p style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.green, margin: 0, lineHeight: 1.6 }}>
-              <strong>Tiebreakers:</strong> Points → Match Differential → Wins → Head-to-head · Highlighted rows (Q) qualify; faded rows (E) are statistically eliminated.
+              <strong>Tiebreakers:</strong> Points → Match Differential → Total Matches Played · Highlighted rows (Q) hold a playoff spot — top 4 per region advance.
             </p>
           </div>
         </div>
       </div>
 
-      {/* ── Group Standings ── */}
+      {/* ── Region Standings ── */}
       <div style={{ background: C.sand, padding: "48px 32px 56px" }}>
         <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
           <div style={{
@@ -520,18 +446,18 @@ export default function MatchPlayPage() {
             fontFamily: "'Outfit'", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800,
             letterSpacing: "-0.03em", margin: "0 0 6px", color: C.green,
           }}>
-            Round-Robin Standings
+            Regional Standings
           </h2>
           <p style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver, margin: "0 0 28px", lineHeight: 1.6 }}>
-            Each player competes in 5 matches within their group. Top 2 advance to playoffs.
+            Each player's best 5 results within their region count toward the standings. Top 4 advance to the playoffs.
           </p>
 
           {loading ? (
             <div style={{ fontFamily: "'DM Sans'", color: C.silver, fontSize: "14px" }}>Loading standings…</div>
           ) : (
             <div className="ep-groups-grid">
-              {Object.keys(GROUPS).map(key => (
-                <GroupCard key={key} groupKey={key} standings={allStandings[key] || []} matches={matches} />
+              {Object.keys(REGIONS).map(key => (
+                <RegionCard key={key} regionKey={key} standings={allStandings[key] || []} matches={matches} />
               ))}
             </div>
           )}

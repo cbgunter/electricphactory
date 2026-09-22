@@ -1,0 +1,86 @@
+1. Hey... How are you feeling today?
+A. Eagle
+B. Birdie
+C. Par
+D. Bogey
+E. Double Bogey
+
+If answer is A or B transition to "Slay Queen..."
+If answer is D or E transition to "Let's grab a dog and a beer at the turn."
+
+
+2. What is your zip code? [Single Textbox]
+
+Validate the 5 digit zip code.
+For all answer, transition to the display the weather with an emojii.
+
+3. How are you feeling about your golf game right now? [Multiple Choice]
+A. Dialed in — don't change a thing
+B. Pretty good, a few things to work on
+C. It's a work in progress
+D. I'm in a full rebuild
+E. I've accepted who I am
+
+4.1. How many events have you played in so far this year?
+[Numbers 0-8]
+
+4.2 How many event did you want to play in?
+[Numbers 0-8]
+
+4.3 When you've had to miss one of our events, what was the most common reason? [Check All that Applies]
+A. Family or personal commitment
+B. Work schedule
+C. Cost of the round
+D. Course or location didn't appeal to me
+E. Playing golf elsewhere that day
+F. Not enough notice
+G. I haven't missed many events
+H. Other [Text Box]
+
+5. If you could be one of the monsters from the hit Nickelodeon series "Ahhh... Real Monsters", who would you be?
+A. Ickis
+B. Oblina
+C. Krumm
+D. The Gromble
+
+Transition to a graph result for this questions answers so far.
+
+6. What's the most you're comfortable spending per round for a group event (greens fees only)? [Multiple Choice]
+A. Under $50
+B. $50–$80
+C. $80–$120
+D. $120–$175
+E. $175+ if the course is worth it
+
+7. Be honest — do you care about playing a nicer course, or would you rather play a goat track with your best buds? 
+[Rating]
+
+Give me the Delcastle and some beers
+Neutral
+Merion or GTFO
+
+8. Who is your favorite golfer? [Multiple Choice]
+A. Mike Revak
+
+Transition to... "Yeah, we thought so."
+
+9. Are you currently involved in any other regular golf commitments (leagues, standing tee times, other groups)? [Multiple Choice]
+A. Yes, and they sometimes conflict with our events
+B. Yes, but they rarely conflict
+C. No other regular commitments
+
+10. If you were a cartoon character on the golf course, which would you be? [Multiple Choice]
+A. Inspector Gadget — lots of equipment, rarely works as intended
+B. Darkwing Duck — dramatic entrance, questionable follow-through
+C. Ren & Stimpy — one of you is way too intense, the other doesn't care at all
+D. Johnny Bravo — looks great in the outfit, that's about it
+E. Rocko (Rocko's Modern Life) — just trying to get through the round without a meltdown
+
+11. Would you be down for an EP roadtrip? [Rating]
+Nah, that wouldn't be fun
+Neutral
+Hell yeah, brother!
+
+12. Is there anything about how we run events that you'd change? Even small things count. [Single Textbox]
+
+13. Anything else you want us to know? [Single Textbox]
