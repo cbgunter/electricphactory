@@ -56,7 +56,7 @@ export default function MatchPlayAdmin() {
       return;
     }
     if (winner !== "TIE" && !differential) {
-      setStatus({ ok: false, msg: "Enter the margin (holes)." });
+      setStatus({ ok: false, msg: "Enter the match differential." });
       return;
     }
 
@@ -174,12 +174,15 @@ export default function MatchPlayAdmin() {
 
           {winner && winner !== "TIE" && (
             <div>
-              <label style={labelStyle}>Margin (holes up, e.g. 5&amp;3 → 5)</label>
+              <label style={labelStyle}>Match Differential (holes up, e.g. 5&amp;3 → 5)</label>
               <input
                 type="number" min="1" max="18" inputMode="numeric"
                 value={differential} onChange={e => setDifferential(e.target.value)}
                 style={inputStyle}
               />
+              <p style={{ fontFamily: "'DM Sans'", fontSize: "12px", color: C.silver, margin: "6px 0 0" }}>
+                Per the rules, this is what breaks ties in the standings.
+              </p>
             </div>
           )}
 
