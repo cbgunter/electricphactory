@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { API, REGIONS, MIN_MATCHES, calculateAllStandings, generateBracket, fmtDiff, displayName } from "./data.js";
+import { API, REGIONS, MIN_MATCHES, SHOW_BRACKET, calculateAllStandings, generateBracket, fmtDiff, displayName } from "./data.js";
 
 const C = {
   cream: "#F5F0E8", green: "#004C54", orange: "#D4691C",
@@ -352,87 +352,82 @@ export default function MatchPlayPage() {
       </div>
 
       {/* ── Bracket ── */}
-      <div style={{ background: C.cream, padding: "40px 32px 48px" }}>
-        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-          <div style={{
-            fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
-            letterSpacing: "0.14em", textTransform: "uppercase",
-            color: C.orange, marginBottom: "8px",
-          }}>Playoff Bracket</div>
-          <h2 style={{
-            fontFamily: "'Outfit'", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800,
-            letterSpacing: "-0.03em", margin: "0 0 6px", color: C.green,
-          }}>
-            Quarterfinals → Semifinals → Championship
-          </h2>
-          <p style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver, margin: "0 0 28px", lineHeight: 1.6 }}>
-            {groupPlayComplete
-              ? "Group play complete. Bracket seeded and ready."
-              : "Bracket seeded from region standings. Quarterfinal slots update as group play finishes."}
-          </p>
-
-          {loading ? (
-            <div style={{ fontFamily: "'DM Sans'", color: C.silver, fontSize: "14px" }}>Loading bracket…</div>
-          ) : (
-            <div className="ep-bracket-grid">
-              {/* Quarterfinals */}
-              <div className="ep-bracket-round" style={{ flex: 3, gap: "10px" }}>
-                <RoundLabel>Quarterfinals</RoundLabel>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {bracket.quarters.slice(0, 2).map((match, i) => (
-                    <BracketMatchCard key={i} match={match} label={`QF${i + 1}`} />
-                  ))}
-                </div>
-                <div style={{ flex: 1 }} />
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
-                  {bracket.quarters.slice(2, 4).map((match, i) => (
-                    <BracketMatchCard key={i + 2} match={match} label={`QF${i + 3}`} />
-                  ))}
-                </div>
-              </div>
-
-              <BracketConnector />
-
-              {/* Semifinals */}
-              <div className="ep-bracket-round" style={{ flex: 3, justifyContent: "space-around" }}>
-                <RoundLabel>Semifinals</RoundLabel>
-                {bracket.semis.map((match, i) => (
-                  <BracketMatchCard key={i} match={match} label={`SF${i + 1}`} />
-                ))}
-              </div>
-
-              <BracketConnector />
-
-              {/* Final */}
-              <div className="ep-bracket-round" style={{ flex: 3, justifyContent: "center" }}>
-                <RoundLabel>Championship</RoundLabel>
-                <BracketMatchCard match={bracket.final} label="Final" isFinal />
-                {bracket.final.completed && bracket.final.winner && (
-                  <div style={{
-                    marginTop: "16px", padding: "16px", background: C.green,
-                    borderRadius: "10px", textAlign: "center",
-                    border: `2px solid ${C.orange}`,
-                  }}>
-                    <div style={{ fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 700, color: C.orange, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "6px" }}>
-                      Tournament Champion
-                    </div>
-                    <div style={{ fontFamily: "'Outfit'", fontSize: "22px", fontWeight: 800, color: C.cream }}>
-                      {displayName(bracket.final.winner)}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Tiebreaker note */}
-          <div style={{ marginTop: "20px", padding: "14px 18px", background: `${C.green}08`, borderRadius: "10px", borderLeft: `3px solid ${C.green}30` }}>
-            <p style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.green, margin: 0, lineHeight: 1.6 }}>
-              <strong>Tiebreakers:</strong> Points → Match Differential → Total Matches Played · Highlighted rows (Q) hold a playoff spot — top 4 per region advance.
+      {SHOW_BRACKET && (
+        <div style={{ background: C.cream, padding: "40px 32px 48px" }}>
+          <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+            <div style={{
+              fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 600,
+              letterSpacing: "0.14em", textTransform: "uppercase",
+              color: C.orange, marginBottom: "8px",
+            }}>Playoff Bracket</div>
+            <h2 style={{
+              fontFamily: "'Outfit'", fontSize: "clamp(22px, 3vw, 30px)", fontWeight: 800,
+              letterSpacing: "-0.03em", margin: "0 0 6px", color: C.green,
+            }}>
+              Quarterfinals → Semifinals → Championship
+            </h2>
+            <p style={{ fontFamily: "'DM Sans'", fontSize: "14px", color: C.silver, margin: "0 0 28px", lineHeight: 1.6 }}>
+              {groupPlayComplete
+                ? "Group play complete. Bracket seeded and ready."
+                : "Bracket seeded from region standings. Quarterfinal slots update as group play finishes."}
             </p>
+
+            {loading ? (
+              <div style={{ fontFamily: "'DM Sans'", color: C.silver, fontSize: "14px" }}>Loading bracket…</div>
+            ) : (
+              <div className="ep-bracket-grid">
+                {/* Quarterfinals */}
+                <div className="ep-bracket-round" style={{ flex: 3, gap: "10px" }}>
+                  <RoundLabel>Quarterfinals</RoundLabel>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {bracket.quarters.slice(0, 2).map((match, i) => (
+                      <BracketMatchCard key={i} match={match} label={`QF${i + 1}`} />
+                    ))}
+                  </div>
+                  <div style={{ flex: 1 }} />
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
+                    {bracket.quarters.slice(2, 4).map((match, i) => (
+                      <BracketMatchCard key={i + 2} match={match} label={`QF${i + 3}`} />
+                    ))}
+                  </div>
+                </div>
+
+                <BracketConnector />
+
+                {/* Semifinals */}
+                <div className="ep-bracket-round" style={{ flex: 3, justifyContent: "space-around" }}>
+                  <RoundLabel>Semifinals</RoundLabel>
+                  {bracket.semis.map((match, i) => (
+                    <BracketMatchCard key={i} match={match} label={`SF${i + 1}`} />
+                  ))}
+                </div>
+
+                <BracketConnector />
+
+                {/* Final */}
+                <div className="ep-bracket-round" style={{ flex: 3, justifyContent: "center" }}>
+                  <RoundLabel>Championship</RoundLabel>
+                  <BracketMatchCard match={bracket.final} label="Final" isFinal />
+                  {bracket.final.completed && bracket.final.winner && (
+                    <div style={{
+                      marginTop: "16px", padding: "16px", background: C.green,
+                      borderRadius: "10px", textAlign: "center",
+                      border: `2px solid ${C.orange}`,
+                    }}>
+                      <div style={{ fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 700, color: C.orange, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: "6px" }}>
+                        Tournament Champion
+                      </div>
+                      <div style={{ fontFamily: "'Outfit'", fontSize: "22px", fontWeight: 800, color: C.cream }}>
+                        {displayName(bracket.final.winner)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </div>
+      )}
 
       {/* ── Region Standings ── */}
       <div style={{ background: C.sand, padding: "48px 32px 56px" }}>
@@ -461,6 +456,13 @@ export default function MatchPlayPage() {
               ))}
             </div>
           )}
+
+          {/* Tiebreaker note */}
+          <div style={{ marginTop: "20px", padding: "14px 18px", background: `${C.green}08`, borderRadius: "10px", borderLeft: `3px solid ${C.green}30` }}>
+            <p style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.green, margin: 0, lineHeight: 1.6 }}>
+              <strong>Tiebreakers:</strong> Points → Match Differential → Total Matches Played · Highlighted rows (Q) hold a playoff spot — top 4 per region advance once group play is far enough along.
+            </p>
+          </div>
         </div>
       </div>
 

@@ -25,6 +25,9 @@ export const MIN_MATCHES = 5;
 export const MAX_MATCHES = 10;
 export const BEST_OF = 5;
 
+// Flip to true once group play is far enough along for the bracket to mean anything.
+export const SHOW_BRACKET = false;
+
 export const PLAYOFF_ROUNDS = {
   QUARTER: { label: "Quarterfinal", slots: 4 },
   SEMI: { label: "Semifinal", slots: 2 },
