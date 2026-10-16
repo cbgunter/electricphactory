@@ -11,6 +11,10 @@ const CONTACT_TO = process.env.CONTACT_TO;
 const CONTACT_FROM = process.env.CONTACT_FROM;
 const MATCHPLAY_ADMIN_KEY = process.env.MATCHPLAY_ADMIN_KEY;
 
+// /submit may only write to these surveys; matchplay rows are written solely via the keyed route.
+const ALLOWED_SURVEYS = new Set(["2026-ms"]);
+const MAX_ANSWERS_BYTES = 10_000;
+
 const MATCHPLAY_SURVEY_ID = "matchplay-2026-27";
 const MATCHPLAY_GROUPS = new Set(["SOUTH", "NORTH"]);
 const MATCHPLAY_PLAYOFF_SLOTS = { QUARTER: 4, SEMI: 2, FINAL: 1 };
@@ -44,6 +48,9 @@ export const handler = async (event) => {
 
     const { surveyId, answers } = body;
     if (!surveyId || !answers) return respond(400, { error: "Missing surveyId or answers" });
+    if (!ALLOWED_SURVEYS.has(surveyId)) return respond(400, { error: "Unknown survey" });
+    if (typeof answers !== "object" || Array.isArray(answers) || JSON.stringify(answers).length > MAX_ANSWERS_BYTES)
+      return respond(400, { error: "Invalid answers" });
 
     await ddb.send(new PutCommand({
       TableName: TABLE,
@@ -172,6 +179,7 @@ export const handler = async (event) => {
   if (method === "GET" && path === "/results") {
     const { surveyId, questionId } = event.queryStringParameters || {};
     if (!surveyId || !questionId) return respond(400, { error: "Missing surveyId or questionId" });
+    if (!ALLOWED_SURVEYS.has(surveyId)) return respond(400, { error: "Unknown survey" });
 
     let items = [];
     let lastKey;
