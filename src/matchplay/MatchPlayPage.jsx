@@ -108,7 +108,7 @@ function RegionCard({ regionKey, standings, matches }) {
       <table style={{ width: "100%", borderCollapse: "collapse", whiteSpace: "nowrap" }}>
         <thead>
           <tr style={{ background: `${C.deep}08` }}>
-            {["#", "Player", "Win", "Loss", "Tie", "Points", "Match Differential", "Total Matches Played"].map((h, i) => (
+            {["#", "Player", "W", "L", "T", "Pts", "Diff", "MP"].map((h, i) => (
               <th key={h} style={{
                 fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 700,
                 color: C.silver, letterSpacing: "0.06em", lineHeight: 1.3,
@@ -153,6 +153,9 @@ function RegionCard({ regionKey, standings, matches }) {
           })}
         </tbody>
       </table>
+      </div>
+      <div style={{ fontFamily: "'DM Sans'", fontSize: "12px", lineHeight: 1.6, color: C.silver, padding: "10px 14px" }}>
+        <strong>W</strong> Win · <strong>L</strong> Loss · <strong>T</strong> Tie · <strong>Pts</strong> Points · <strong>Diff</strong> Match Differential · <strong>MP</strong> Total Matches Played
       </div>
     </div>
   );
