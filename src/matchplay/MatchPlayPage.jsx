@@ -104,13 +104,14 @@ function RegionCard({ regionKey, standings, matches }) {
           {regionMatches.length} match{regionMatches.length === 1 ? "" : "es"} played
         </div>
       </div>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div style={{ overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", whiteSpace: "nowrap" }}>
         <thead>
           <tr style={{ background: `${C.deep}08` }}>
-            {["#", "Player", "P", "W", "T", "L", "Diff"].map((h, i) => (
+            {["#", "Player", "Win", "Loss", "Tie", "Points", "Match Differential", "Total Matches Played"].map((h, i) => (
               <th key={h} style={{
-                fontFamily: "'Outfit'", fontSize: "11px", fontWeight: 700,
-                color: C.silver, letterSpacing: "0.06em",
+                fontFamily: "'Outfit'", fontSize: "12px", fontWeight: 700,
+                color: C.silver, letterSpacing: "0.06em", lineHeight: 1.3,
                 padding: i === 1 ? "8px 12px 8px 8px" : "8px 10px",
                 textAlign: i <= 1 ? "left" : "center",
                 borderBottom: `1px solid ${C.cream}`,
@@ -138,19 +139,21 @@ function RegionCard({ regionKey, standings, matches }) {
                     </span>
                   )}
                 </td>
-                {[s.played, s.won, s.tied, s.lost].map((v, ci) => (
-                  <td key={ci} style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.silver, padding: "8px 10px", textAlign: "center" }}>{v}</td>
+                {[s.won, s.lost, s.tied, s.points].map((v, ci) => (
+                  <td key={ci} style={{ fontFamily: "'DM Sans'", fontSize: "13px", fontWeight: ci === 3 ? 600 : 400, color: C.silver, padding: "8px 10px", textAlign: "center" }}>{v}</td>
                 ))}
                 <td style={{
                   fontFamily: "'DM Sans'", fontSize: "13px", fontWeight: 600,
                   color: s.differential > 0 ? C.orange : C.silver,
                   padding: "8px 10px", textAlign: "center",
                 }}>{fmtDiff(s.differential)}</td>
+                <td style={{ fontFamily: "'DM Sans'", fontSize: "13px", color: C.silver, padding: "8px 10px", textAlign: "center" }}>{s.totalPlayed}</td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
