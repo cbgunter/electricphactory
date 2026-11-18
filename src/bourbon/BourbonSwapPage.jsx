@@ -143,7 +143,7 @@ export default function BourbonSwapPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
-          company,
+          hp_x7: company,
           elapsed: Math.round((Date.now() - startedAt.current) / 1000),
         }),
       });
@@ -269,9 +269,10 @@ export default function BourbonSwapPage() {
               />
             </div>
 
-            {/* Honeypot: hidden from people, bots fill it in */}
+            {/* Honeypot: hidden from people, bots fill it in. No label/name an autofill engine
+                recognizes (a "Company" label got autofilled from a saved address). */}
             <div aria-hidden="true" style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}>
-              <label>Company<input tabIndex={-1} autoComplete="off" value={company} onChange={e => setCompany(e.target.value)} /></label>
+              <input name="hp_x7" tabIndex={-1} autoComplete="off" value={company} onChange={e => setCompany(e.target.value)} />
             </div>
 
             {status && (
