@@ -128,9 +128,11 @@ export const handler = async (event) => {
     try { body = JSON.parse(event.body || "{}"); }
     catch { return respond(400, { error: "Invalid JSON" }); }
 
-    // Spam checks — silent 200 so bots get no signal
-    if (body.company) return respond(200, { success: true });
-    if (!body.elapsed || Number(body.elapsed) < 3) return respond(200, { success: true });
+    // Spam checks. Unlike /contact these return a real error, never a fake success: a fake 200
+    // once swallowed a real member's sign-up when browser autofill filled the old "Company" honeypot.
+    // The honeypot is now `hp_x7` (a name no autofill heuristic matches).
+    if (body.hp_x7) return respond(400, { error: "Something on the form looked automated. Reload the page and try again." });
+    if (!body.elapsed || Number(body.elapsed) < 3) return respond(400, { error: "That was fast. Give it a second and submit again." });
 
     if (Date.now() >= BOURBON_CLOSES_AT) return respond(400, { error: "Sign-ups are closed." });
 
