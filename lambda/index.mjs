@@ -152,20 +152,28 @@ export const handler = async (event) => {
     if (!BOURBON_SAMPLES.has(samples)) return respond(400, { error: "Pick 6 or 12 samples." });
     if (!(style in BOURBON_STYLES)) return respond(400, { error: "Pick how you want your samples sent." });
 
-    // Deterministic key on the normalized name: resubmitting replaces your entry instead of duplicating it.
+    // Keyed on the normalized name, and never overwritten: otherwise anyone with the link could
+    // resubmit someone else's name and reroute their box. Changes go through the organizer.
     const responseId = name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
     if (!responseId) return respond(400, { error: "Name is required." });
 
     const submittedAt = new Date().toISOString();
-    await ddb.send(new PutCommand({
-      TableName: TABLE,
-      Item: {
-        surveyId: BOURBON_SURVEY_ID,
-        responseId,
-        name, street1, street2, city, state, zip, samples, style, notes,
-        submittedAt,
-      },
-    }));
+    try {
+      await ddb.send(new PutCommand({
+        TableName: TABLE,
+        Item: {
+          surveyId: BOURBON_SURVEY_ID,
+          responseId,
+          name, street1, street2, city, state, zip, samples, style, notes,
+          submittedAt,
+        },
+        ConditionExpression: "attribute_not_exists(responseId)",
+      }));
+    } catch (err) {
+      if (err.name === "ConditionalCheckFailedException")
+        return respond(409, { error: "Someone with that name is already signed up. If that's you and you need to change something, message Corey in Slack." });
+      throw err;
+    }
 
     // Heads-up email to the organizer; the sign-up is already saved, so never fail on this.
     if (CONTACT_TO && CONTACT_FROM) {

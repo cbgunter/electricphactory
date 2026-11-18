@@ -205,17 +205,10 @@ export default function BourbonSwapPage() {
               as <strong style={{ color: C.green }}>{styleLabel}</strong>. You'll find out who you're
               shipping to on Dec 1.
             </p>
-            <p style={{ ...bodyStyle, marginBottom: "16px" }}>
+            <p style={bodyStyle}>
               The link for the sample bottles and the shipping instructions are in #bourbon-swap on Slack.
-              Need to change something? Submit again with the same name and it will replace your entry.
+              Need to change your address or anything else? Message Corey in Slack.
             </p>
-            <button
-              type="button"
-              onClick={() => { setDone(false); startedAt.current = Date.now(); }}
-              style={{ fontFamily: "'Outfit'", fontSize: "14px", fontWeight: 700, color: C.green, background: "transparent", border: `1.5px solid ${C.green}`, borderRadius: "8px", padding: "9px 16px", cursor: "pointer" }}
-            >
-              Edit my entry
-            </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} noValidate style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
