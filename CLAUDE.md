@@ -38,6 +38,7 @@ React + Vite SPA with React Router. Routes:
 - `/survey/2026-ms` → `src/survey/SurveyPage.jsx` — member survey (not linked from landing page; share URL directly)
 - `/matchplay` → `src/matchplay/MatchPlayPage.jsx` — match play standings & bracket (linked from nav)
 - `/matchplay/tibbs` → `src/matchplay/MatchPlayAdmin.jsx` — hidden result-entry form (not linked anywhere; `robots.txt` disallows it)
+- `/bourbon-swap` → `src/bourbon/BourbonSwapPage.jsx` — holiday whiskey swap sign-up (not linked anywhere; share the URL in Slack; `robots.txt` disallows it)
 
 **Styling approach:** 100% inline styles via a `C` color palette object at the top of each component file. Responsive/media-query styles live in `src/index.css` as CSS classes (`.ep-hero-grid`, `.ep-about-grid`, `.ep-feature-grid`, `.ep-path-row`, `.ep-nav-links`).
 
@@ -77,6 +78,11 @@ GitHub Actions requires three repo secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACC
 Survey API routes: `POST /submit` (store response), `GET /results?surveyId=X&questionId=Y` (aggregate counts for live chart), `POST /contact` (send email via SES — honeypot + timing spam protection).
 
 Match play API routes (same Lambda/table, see above): `POST /matchplay/submit` (requires `key` matching `MATCHPLAY_ADMIN_KEY`; upserts one match), `GET /matchplay/matches` (returns all rows for the current season, no auth).
+
+Whiskey swap API routes (same Lambda/table): `POST /bourbon/signup` (name, address, 6/12 samples, receive style `answer-key`/`list`/`blind`, optional notes; honeypot + timing spam checks; rejected after `BOURBON_CLOSES_AT`; emails a copy to `CONTACT_TO`), `GET /bourbon/signups` (public "who's in" list, "First L." names only, never addresses). Rows live under `surveyId = "bourbon-swap-2026"` with `responseId` = normalized name, so resubmitting with the same name replaces the entry. Export everything for the draw with:
+```bash
+aws dynamodb query --table-name ep-surveys --region us-east-1 --key-condition-expression "surveyId = :s" --expression-attribute-values '{":s":{"S":"bourbon-swap-2026"}}'
+```
 
 Contact route requires: Lambda env vars `CONTACT_TO` (`cbgunter@gmail.com`) and `CONTACT_FROM` (`contact@mail.electricphactory.golf`); inline IAM policy `ep-contact-ses-send` granting `ses:SendEmail` on `ep-survey-lambda-role`; SES identity verification in us-east-1 (already done).
 

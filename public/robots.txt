@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /survey/
 Disallow: /matchplay/tibbs
+Disallow: /bourbon-swap
 
 Sitemap: https://electricphactory.golf/sitemap.xml

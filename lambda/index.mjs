@@ -19,6 +19,22 @@ const MATCHPLAY_SURVEY_ID = "matchplay-2026-27";
 const MATCHPLAY_GROUPS = new Set(["SOUTH", "NORTH"]);
 const MATCHPLAY_PLAYOFF_SLOTS = { QUARTER: 4, SEMI: 2, FINAL: 1 };
 
+// Holiday whiskey swap sign-ups (/bourbon-swap). Keep CLOSES_AT in sync with the page.
+const BOURBON_SURVEY_ID = "bourbon-swap-2026";
+const BOURBON_CLOSES_AT = Date.parse("2026-12-01T08:00:00Z");
+const BOURBON_SAMPLES = new Set(["6", "12"]);
+const BOURBON_STYLES = {
+  "answer-key": "Full Answer Key",
+  "list": "List of Included Samples",
+  "blind": "Pure Blind Taste",
+};
+const US_STATES = new Set("AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split(" "));
+// "Mike Revak" -> "Mike R." (public list never exposes full names or addresses)
+const shortName = (n) => {
+  const parts = String(n).trim().split(/\s+/);
+  return parts.length > 1 ? `${parts[0]} ${parts[parts.length - 1][0].toUpperCase()}.` : parts[0];
+};
+
 const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "content-type",
@@ -104,6 +120,104 @@ export const handler = async (event) => {
     }));
 
     return respond(200, { success: true });
+  }
+
+  // POST /bourbon/signup
+  if (method === "POST" && path === "/bourbon/signup") {
+    let body;
+    try { body = JSON.parse(event.body || "{}"); }
+    catch { return respond(400, { error: "Invalid JSON" }); }
+
+    // Spam checks — silent 200 so bots get no signal
+    if (body.company) return respond(200, { success: true });
+    if (!body.elapsed || Number(body.elapsed) < 3) return respond(200, { success: true });
+
+    if (Date.now() >= BOURBON_CLOSES_AT) return respond(400, { error: "Sign-ups are closed." });
+
+    const f = (k, max) => stripNewlines(body[k]).slice(0, max);
+    const name = f("name", 100);
+    const street1 = f("street1", 150);
+    const street2 = f("street2", 150);
+    const city = f("city", 80);
+    const state = f("state", 2).toUpperCase();
+    const zip = f("zip", 10);
+    const samples = String(body.samples ?? "");
+    const style = String(body.style ?? "");
+    const notes = String(body.notes ?? "").trim().slice(0, 500);
+
+    if (!name) return respond(400, { error: "Name is required." });
+    if (!street1 || !city) return respond(400, { error: "Street address and city are required." });
+    if (!US_STATES.has(state)) return respond(400, { error: "Pick a state." });
+    if (!/^\d{5}(-\d{4})?$/.test(zip)) return respond(400, { error: "ZIP should be 5 digits." });
+    if (!BOURBON_SAMPLES.has(samples)) return respond(400, { error: "Pick 6 or 12 samples." });
+    if (!(style in BOURBON_STYLES)) return respond(400, { error: "Pick how you want your samples sent." });
+
+    // Deterministic key on the normalized name: resubmitting replaces your entry instead of duplicating it.
+    const responseId = name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    if (!responseId) return respond(400, { error: "Name is required." });
+
+    const submittedAt = new Date().toISOString();
+    await ddb.send(new PutCommand({
+      TableName: TABLE,
+      Item: {
+        surveyId: BOURBON_SURVEY_ID,
+        responseId,
+        name, street1, street2, city, state, zip, samples, style, notes,
+        submittedAt,
+      },
+    }));
+
+    // Heads-up email to the organizer; the sign-up is already saved, so never fail on this.
+    if (CONTACT_TO && CONTACT_FROM) {
+      try {
+        const address = [street1, street2, `${city}, ${state} ${zip}`].filter(Boolean).join("\n");
+        await ses.send(new SendEmailCommand({
+          Source: `Electric Phactory <${CONTACT_FROM}>`,
+          Destination: { ToAddresses: [CONTACT_TO] },
+          Message: {
+            Subject: { Data: `Whiskey Swap sign-up — ${name}`, Charset: "UTF-8" },
+            Body: {
+              Text: {
+                Data: `${name}
+${address}
+
+Samples: ${samples}
+Receive as: ${BOURBON_STYLES[style]}
+${notes ? `
+Notes: ${notes}
+` : ""}`,
+                Charset: "UTF-8",
+              },
+            },
+          },
+        }));
+      } catch (err) {
+        console.error("bourbon signup email failed", err);
+      }
+    }
+
+    return respond(200, { success: true });
+  }
+
+  // GET /bourbon/signups — public "who's in" list: short names only, never addresses
+  if (method === "GET" && path === "/bourbon/signups") {
+    let items = [];
+    let lastKey;
+    do {
+      const result = await ddb.send(new QueryCommand({
+        TableName: TABLE,
+        KeyConditionExpression: "surveyId = :sid",
+        ExpressionAttributeValues: { ":sid": BOURBON_SURVEY_ID },
+        ProjectionExpression: "#n, submittedAt",
+        ExpressionAttributeNames: { "#n": "name" },
+        ExclusiveStartKey: lastKey,
+      }));
+      items = items.concat(result.Items || []);
+      lastKey = result.LastEvaluatedKey;
+    } while (lastKey);
+
+    items.sort((a, b) => String(a.submittedAt).localeCompare(String(b.submittedAt)));
+    return respond(200, { names: items.map(it => shortName(it.name)) });
   }
 
   // POST /matchplay/submit
