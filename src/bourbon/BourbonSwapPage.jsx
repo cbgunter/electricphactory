@@ -59,7 +59,7 @@ const bodyStyle = {
   fontFamily: "'DM Sans'", fontSize: "16px", lineHeight: 1.75, color: C.silver, margin: 0,
 };
 
-const EMPTY = { name: "", street1: "", street2: "", city: "", state: "", zip: "", samples: "", style: "", notes: "" };
+const EMPTY = { name: "", email: "", street1: "", street2: "", city: "", state: "", zip: "", samples: "", style: "", notes: "" };
 
 function ChoiceButton({ selected, onClick, children }) {
   return (
@@ -129,10 +129,12 @@ export default function BourbonSwapPage() {
     e.preventDefault();
     const missing = [];
     if (!form.name.trim()) missing.push("name");
+    if (!form.email.trim()) missing.push("email");
     if (!form.street1.trim() || !form.city.trim() || !form.state || !form.zip.trim()) missing.push("full shipping address");
     if (!form.samples) missing.push("6 or 12 samples");
     if (!form.style) missing.push("how you want to receive your samples");
     if (missing.length) { setStatus({ ok: false, msg: `Still need: ${missing.join(", ")}.` }); return; }
+    if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) { setStatus({ ok: false, msg: "That email doesn't look right." }); return; }
     if (!/^\d{5}(-\d{4})?$/.test(form.zip.trim())) { setStatus({ ok: false, msg: "ZIP should be 5 digits." }); return; }
 
     setSubmitting(true);
@@ -215,6 +217,14 @@ export default function BourbonSwapPage() {
             <div>
               <label htmlFor="bs-name" style={labelStyle}>Name</label>
               <input id="bs-name" value={form.name} onChange={set("name")} autoComplete="name" maxLength={100} style={inputStyle} />
+            </div>
+
+            <div>
+              <label htmlFor="bs-email" style={labelStyle}>Email</label>
+              <input id="bs-email" type="email" value={form.email} onChange={set("email")} autoComplete="email" inputMode="email" maxLength={200} style={inputStyle} />
+              <p style={{ ...bodyStyle, fontSize: "14px", lineHeight: 1.6, marginTop: "8px" }}>
+                Only used for swap updates, like letting you know who you drew. Never shown on this page.
+              </p>
             </div>
 
             <fieldset style={{ border: "none", padding: 0, margin: 0, display: "grid", gap: "10px" }}>

@@ -79,7 +79,7 @@ Survey API routes: `POST /submit` (store response), `GET /results?surveyId=X&que
 
 Match play API routes (same Lambda/table, see above): `POST /matchplay/submit` (requires `key` matching `MATCHPLAY_ADMIN_KEY`; upserts one match), `GET /matchplay/matches` (returns all rows for the current season, no auth).
 
-Whiskey swap API routes (same Lambda/table): `POST /bourbon/signup` (name, address, 6/12 samples, receive style `answer-key`/`list`/`blind`, optional notes; honeypot + timing spam checks; rejected after `BOURBON_CLOSES_AT`; emails a copy to `CONTACT_TO`), `GET /bourbon/signups` (public "who's in" list, "First L." names only, never addresses). Rows live under `surveyId = "bourbon-swap-2026"` with `responseId` = normalized name; a duplicate name is rejected (409), never overwritten, so nobody can reroute someone else's box. Edits go through Corey (fix the row directly in DynamoDB). Export everything for the draw with:
+Whiskey swap API routes (same Lambda/table): `POST /bourbon/signup` (name, email, address, 6/12 samples, receive style `answer-key`/`list`/`blind`, optional notes; honeypot + timing spam checks; rejected after `BOURBON_CLOSES_AT`; emails a copy to `CONTACT_TO`), `GET /bourbon/signups` (public "who's in" list, "First L." names only, never addresses). Rows live under `surveyId = "bourbon-swap-2026"` with `responseId` = normalized name; a duplicate name is rejected (409), never overwritten, so nobody can reroute someone else's box. Edits go through Corey (fix the row directly in DynamoDB). Export everything for the draw with:
 ```bash
 aws dynamodb query --table-name ep-surveys --region us-east-1 --key-condition-expression "surveyId = :s" --expression-attribute-values '{":s":{"S":"bourbon-swap-2026"}}'
 ```

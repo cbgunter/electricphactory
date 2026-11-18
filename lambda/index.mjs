@@ -138,6 +138,7 @@ export const handler = async (event) => {
 
     const f = (k, max) => stripNewlines(body[k]).slice(0, max);
     const name = f("name", 100);
+    const email = f("email", 200).toLowerCase();
     const street1 = f("street1", 150);
     const street2 = f("street2", 150);
     const city = f("city", 80);
@@ -148,6 +149,7 @@ export const handler = async (event) => {
     const notes = String(body.notes ?? "").trim().slice(0, 500);
 
     if (!name) return respond(400, { error: "Name is required." });
+    if (!email || !EMAIL_RE.test(email)) return respond(400, { error: "A valid email is required." });
     if (!street1 || !city) return respond(400, { error: "Street address and city are required." });
     if (!US_STATES.has(state)) return respond(400, { error: "Pick a state." });
     if (!/^\d{5}(-\d{4})?$/.test(zip)) return respond(400, { error: "ZIP should be 5 digits." });
@@ -166,7 +168,7 @@ export const handler = async (event) => {
         Item: {
           surveyId: BOURBON_SURVEY_ID,
           responseId,
-          name, street1, street2, city, state, zip, samples, style, notes,
+          name, email, street1, street2, city, state, zip, samples, style, notes,
           submittedAt,
         },
         ConditionExpression: "attribute_not_exists(responseId)",
@@ -184,11 +186,13 @@ export const handler = async (event) => {
         await ses.send(new SendEmailCommand({
           Source: `Electric Phactory <${CONTACT_FROM}>`,
           Destination: { ToAddresses: [CONTACT_TO] },
+          ReplyToAddresses: [email],
           Message: {
             Subject: { Data: `Whiskey Swap sign-up — ${name}`, Charset: "UTF-8" },
             Body: {
               Text: {
                 Data: `${name}
+${email}
 ${address}
 
 Samples: ${samples}
